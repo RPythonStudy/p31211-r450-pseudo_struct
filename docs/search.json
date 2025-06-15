@@ -1,0 +1,23 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "quarto/vault.html",
+    "href": "quarto/vault.html",
+    "title": "개인정보보호",
+    "section": "",
+    "text": "EMR으로부터 다운로드되는 의료정보는 중앙서버에 로그가 남아야하고, 가명화(익명화)담당자는 익명화조치 기록을 남겨야 한다. 같은 환자의 가명화는 같은 결과라서 다른 시점의 가명화를 하더라도 같은 가명환자로 인식되도록 한다. 가명화는 적법한 원내승인절차에 따른 경우에는 역추적이 가능해야 한다.\n가명화(익명화)담당자가 HashCorp Vault를 사용하여 가명화 키를 관리한다고 가정하여 이 프로젝트에서는 vault를 사용하여 가명화를 진행한다.\n\n설치\n운영체제별로… 여기서는 wsl2 ubuntu\n\n1. HashiCorp GPG 키 등록\ncurl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg\n\n\n2. HashiCorp 저장소 추가\necho \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/hashicorp.list\n\n\n3. 패키지 정보 갱신\nsudo apt update\n\n\n4. Vault 설치\nsudo apt install vault\n\n\n설치검증\nvault -v\ncf) vault -version 명령은 실행되지 않으니 주의를 요한다.\n\n\n\n설정"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "p3135-r450-template",
+    "section": "",
+    "text": "source(\"_setup.R\")\n\nhere() starts at /home/ben/projects/p3135-r450-pseudo_struct\n\n\nINFO [2025-06-15 11:42:00] 📄 사용자 정의 함수 로드 완료 (fs::dir_ls + source)"
+  }
+]

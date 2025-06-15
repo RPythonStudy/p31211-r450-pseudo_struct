@@ -1,0 +1,87 @@
+---
+title: "개인정보보호"
+description: ""
+author: "BenKorea"
+date: "2025-06-15"
+date-modified: last-modified
+---
+
+EMR으로부터 다운로드되는 의료정보는 중앙서버에 로그가 남아야하고, 가명화(익명화)담당자는 익명화조치 기록을 남겨야 한다. 같은 환자의 가명화는 같은 결과라서 다른 시점의 가명화를 하더라도 같은 가명환자로 인식되도록 한다. 가명화는 적법한 원내승인절차에 따른 경우에는 역추적이 가능해야 한다.
+
+가명화(익명화)담당자가 HashCorp Vault를 사용하여 가명화 키를 관리한다고 가정하여 이 프로젝트에서는 vault를 사용하여 가명화를 진행한다.
+
+### 설치
+
+운영체제별로... 여기서는 wsl2 ubuntu
+
+#### 1. HashiCorp GPG 키 등록
+
+``` bash
+curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+```
+
+#### 2. HashiCorp 저장소 추가
+
+``` bash
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+```
+
+#### 3. 패키지 정보 갱신
+
+``` bash
+sudo apt update
+```
+
+#### 4. Vault 설치
+
+``` bash
+sudo apt install vault
+```
+
+#### 설치검증
+
+``` bash
+vault -v
+```
+
+cf) vault -version 명령은 실행되지 않으니 주의를 요한다.
+
+### 설정
+
+#### 사용자 및 그룹 생성
+
+``` bash
+sudo groupadd vault
+sudo useradd --system --home /etc/vault --shell /bin/false --gid vault vault
+```
+
+#### 파일시스템으로 백엔드 설정
+
+```{r, engine='bash', eval=FALSE, filename='vault-config.hcl'}
+# vault.hcl
+storage "file" {
+  path = "/var/lib/vault/data"    # 데이터가 저장될 경로
+}
+
+listener "tcp" {
+  address     = "127.0.0.1:8200"  # 로컬호스트만 접근 허용(개발용)
+  tls_disable = 1                 # 개발/테스트만! 운영환경에서는 반드시 TLS 설정
+}
+
+disable_mlock = true              # WSL2나 일반 Ubuntu에서는 true로 두는 것이 편리
+ui = true                         # 웹 UI 활성화(필요시)
+```
+
+``` bash
+sudo mkdir -p /etc/vault
+sudo chown vault:vault /etc/vault
+```
+
+``` bash
+sudo mkdir -p /var/lib/vault/data
+sudo chown vault:vault /var/lib/vault/data
+```
+
+``` bash
+vault server -config=/etc/vault/vault.hcl
+```

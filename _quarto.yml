@@ -3,11 +3,13 @@ project:
   output-dir: docs
 
 website:
-  title: "p3135-r450-template"
+  title: "Pseudo_Struct"
   navbar:
     left:
       - href: index.qmd
         text: Home
+      - href: quarto/vault.qmd
+        text: 개인정보보호        
       - about.qmd
 
 format:

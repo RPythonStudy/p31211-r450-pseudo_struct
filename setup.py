@@ -10,12 +10,16 @@ long_description = (HERE / "README.md").read_text(encoding="utf-8")
 
 # requirements.txt에서 의존성 읽기
 install_requires = [
-    req.strip() for req in (HERE / "requirements.txt").read_text().splitlines()
-    if req.strip() and not req.startswith("#")
+    "iniconfig==2.1.0",
+    "packaging==25.0",
+    "pluggy==1.6.0",
+    "Pygments==2.19.1",
+    "pytest==8.4.0",
+    "PyYAML==6.0.2"
 ]
 
 setup(
-    name="Template",        # 복제 후 프로젝트명으로 변경
+    name="seudo_struct",        # 복제 후 프로젝트명으로 변경
     version="0.1.0",
     description="프로젝트 설명을 간단히 적어주세요",
     long_description=long_description,
