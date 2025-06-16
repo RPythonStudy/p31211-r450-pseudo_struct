@@ -1,18 +1,44 @@
 ---
-title: "개인정보보호"
+title: "Vault 설치 및 설정"
 description: ""
 author: "BenKorea"
 date: "2025-06-15"
 date-modified: last-modified
 ---
 
-EMR으로부터 다운로드되는 의료정보는 중앙서버에 로그가 남아야하고, 가명화(익명화)담당자는 익명화조치 기록을 남겨야 한다. 같은 환자의 가명화는 같은 결과라서 다른 시점의 가명화를 하더라도 같은 가명환자로 인식되도록 한다. 가명화는 적법한 원내승인절차에 따른 경우에는 역추적이 가능해야 한다.
+### 개인정보보호
 
-가명화(익명화)담당자가 HashCorp Vault를 사용하여 가명화 키를 관리한다고 가정하여 이 프로젝트에서는 vault를 사용하여 가명화를 진행한다.
+-   **의무기록시스템(EMR)으로부터 추출된 의료정보는 중앙 로깅 서버에 모든 접근 및 다운로드 이력이 기록되어야 한다.**
+
+-   **가명화 또는 익명화 조치를 수행하는 책임자는 해당 조치의 수행 이력 및 방식에 대한 기록(log)을 남겨야 하며, 이 기록은 감사를 위해 보존되어야 한다.**
+
+-   **임상연구를 위해 가명화된 환자 식별자는 동일 환자의 반복 가명화 시에도 일관되게 동일한 가명 식별자로 생성되어야 하며, 이를 통해 시간대별 또는 다기관 간 데이터 통합 및 분석이 가능하도록 해야 한다.**
+
+-   **가명화된 정보는 적법한 원내 승인 절차(예: 연구윤리위원회(IRB) 승인 등)에 따른 요청이 있을 경우, 정당한 목적 하에 원 식별자에 대한 역추적이 가능하도록 체계가 마련되어야 한다.**
+
+### HashCorp Vault
+이 프로젝트에서는 가명화를 위해 HashCorp Vault를 사용하며, 가명화(익명화)담당자가 HashCorp Vault를 사용하여 가명화 키를 관리한다고 가정하였다.
 
 ### 설치
 
 운영체제별로... 여기서는 wsl2 ubuntu
+
+#### 시스템 그룹으로 등록
+``` bash
+sudo groupadd --system vault
+```
+그룹목록을 확인
+```bash
+getent group
+```
+
+#### 시스템사용자로 등록
+```bash
+sudo useradd --system --home /etc/vault --shell /bin/false --gid vault vault
+```
+```bash
+getent passwd vault
+```
 
 #### 1. HashiCorp GPG 키 등록
 
@@ -46,42 +72,122 @@ vault -v
 
 cf) vault -version 명령은 실행되지 않으니 주의를 요한다.
 
-### 설정
+#### 필수 디렉토리 권한설정
 
-#### 사용자 및 그룹 생성
-
-``` bash
-sudo groupadd vault
-sudo useradd --system --home /etc/vault --shell /bin/false --gid vault vault
-```
-
-#### 파일시스템으로 백엔드 설정
-
-```{r, engine='bash', eval=FALSE, filename='vault-config.hcl'}
-# vault.hcl
-storage "file" {
-  path = "/var/lib/vault/data"    # 데이터가 저장될 경로
-}
-
-listener "tcp" {
-  address     = "127.0.0.1:8200"  # 로컬호스트만 접근 허용(개발용)
-  tls_disable = 1                 # 개발/테스트만! 운영환경에서는 반드시 TLS 설정
-}
-
-disable_mlock = true              # WSL2나 일반 Ubuntu에서는 true로 두는 것이 편리
-ui = true                         # 웹 UI 활성화(필요시)
-```
-
+설정파일용
 ``` bash
 sudo mkdir -p /etc/vault
-sudo chown vault:vault /etc/vault
+```
+
+데이터 스토리지용
+``` bash
+sudo mkdir -p /var/lib/vault
+```
+
+데이터 스토리지용
+``` bash
+sudo mkdir -p /var/log/vault
+```
+
+재귀적으로 권한설정
+```bash
+sudo chown -R vault:vault /etc/vault /var/lib/vault /var/log/vault
+```
+```bash
+sudo chmod 700 /etc/vault /var/lib/vault
+```
+
+#### 설정파일 만들기
+
+```{r, engine='bash', eval=FALSE, filename='vault.hcl'}
+# /etc/vault/vault.hcl
+
+# 1) 스토리지 백엔드
+storage "file" {
+  path = "/var/lib/vault"
+}
+
+# 2) 리스너 (TLS 적용 권장)
+listener "tcp" {
+  address     = "0.0.0.0:8200"
+  tls_disable = 1            # 운영환경에서는 tls_disable = 0 과 cert/key 설정 사용
+}
+
+# 3) UI 활성화
+ui = true
+
+# 4) 감사로그 (선택)
+audit "file" {
+  file_path = "/var/log/vault/audit.log"
+  log_raw   = true
+}
+```
+
+설정파일에 대한 사용자 및 권한설정
+```bash
+sudo chown vault:vault /etc/vault/vault.hcl
 ```
 
 ``` bash
-sudo mkdir -p /var/lib/vault/data
-sudo chown vault:vault /var/lib/vault/data
+sudo chmod 640 /etc/vault/vault.hcl
 ```
 
-``` bash
-vault server -config=/etc/vault/vault.hcl
+#### systemd
+
+/etc/systemd/system/vault.service 를 다음과 같이 작성
+
+```bash
+[Unit]
+Description=HashiCorp Vault - Secret Management
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=vault
+Group=vault
+ExecStart=/usr/bin/vault server -config=/etc/vault/vault.hcl
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
 ```
+사용자변경 및 권한설정
+```bash
+sudo chown root:root /etc/systemd/system/vault.service
+```
+```bash
+sudo chmod 644 /etc/systemd/system/vault.service
+```
+
+#### 기동
+```bash
+sudo systemctl daemon-reload
+```
+```bash
+sudo systemctl enable vault
+```bash
+sudo systemctl start vault 
+```
+```bash
+sudo systemctl status vault
+```
+### 최초설정
+
+```bash
+sudo vault operator init
+```
+
+HTTPS와 HTTP 불일치를 해결을 위한 인자로 주어서 초기설정 시작
+```
+ sudo vault operator init -address="http://127.0.0.1:8200"
+```
+키와 토큰을 잘 저장한 후
+
+```bash
+vault operator unseal <UNSEAL_KEY>
+```
+
+Sealed: false로 바뀐 것을 확인한 후
+
