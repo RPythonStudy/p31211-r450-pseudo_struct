@@ -1,5 +1,4 @@
-# {프로젝트명}  
-(예: Pseudonymized Health Data Structuring Platform)
+# {Pseudonymized Health Data Structuring Platform)
 
 ## 개요
 
