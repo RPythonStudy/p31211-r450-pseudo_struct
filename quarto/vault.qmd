@@ -2,7 +2,7 @@
 title: "Vault 설치 및 설정"
 description: ""
 author: "BenKorea"
-date: "2025-06-15"
+date: "2025-06-18"
 date-modified: last-modified
 ---
 
@@ -17,6 +17,7 @@ date-modified: last-modified
 -   **가명화된 정보는 적법한 원내 승인 절차(예: 연구윤리위원회(IRB) 승인 등)에 따른 요청이 있을 경우, 정당한 목적 하에 원 식별자에 대한 역추적이 가능하도록 체계가 마련되어야 한다.**
 
 ### HashCorp Vault
+
 이 프로젝트에서는 가명화를 위해 HashCorp Vault를 사용하며, 가명화(익명화)담당자가 HashCorp Vault를 사용하여 가명화 키를 관리한다고 가정하였다.
 
 ### 설치
@@ -24,19 +25,24 @@ date-modified: last-modified
 운영체제별로... 여기서는 wsl2 ubuntu
 
 #### 시스템 그룹으로 등록
+
 ``` bash
 sudo groupadd --system vault
 ```
+
 그룹목록을 확인
-```bash
+
+``` bash
 getent group
 ```
 
 #### 시스템사용자로 등록
-```bash
+
+``` bash
 sudo useradd --system --home /etc/vault --shell /bin/false --gid vault vault
 ```
-```bash
+
+``` bash
 getent passwd vault
 ```
 
@@ -75,25 +81,30 @@ cf) vault -version 명령은 실행되지 않으니 주의를 요한다.
 #### 필수 디렉토리 권한설정
 
 설정파일용
+
 ``` bash
 sudo mkdir -p /etc/vault
 ```
 
 데이터 스토리지용
+
 ``` bash
 sudo mkdir -p /var/lib/vault
 ```
 
 데이터 스토리지용
+
 ``` bash
 sudo mkdir -p /var/log/vault
 ```
 
 재귀적으로 권한설정
-```bash
+
+``` bash
 sudo chown -R vault:vault /etc/vault /var/lib/vault /var/log/vault
 ```
-```bash
+
+``` bash
 sudo chmod 700 /etc/vault /var/lib/vault
 ```
 
@@ -124,7 +135,8 @@ audit "file" {
 ```
 
 설정파일에 대한 사용자 및 권한설정
-```bash
+
+``` bash
 sudo chown vault:vault /etc/vault/vault.hcl
 ```
 
@@ -136,7 +148,7 @@ sudo chmod 640 /etc/vault/vault.hcl
 
 /etc/systemd/system/vault.service 를 다음과 같이 작성
 
-```bash
+``` bash
 [Unit]
 Description=HashiCorp Vault - Secret Management
 After=network-online.target
@@ -153,41 +165,49 @@ LimitNOFILE=65536
 [Install]
 WantedBy=multi-user.target
 ```
+
 사용자변경 및 권한설정
-```bash
+
+``` bash
 sudo chown root:root /etc/systemd/system/vault.service
 ```
-```bash
+
+``` bash
 sudo chmod 644 /etc/systemd/system/vault.service
 ```
 
 #### 기동
-```bash
+
+``` bash
 sudo systemctl daemon-reload
 ```
-```bash
+
+``` bash
 sudo systemctl enable vault
 ```bash
 sudo systemctl start vault 
 ```
-```bash
+
+``` bash
 sudo systemctl status vault
 ```
+
 ### 최초설정
 
-```bash
+``` bash
 sudo vault operator init
 ```
 
 HTTPS와 HTTP 불일치를 해결을 위한 인자로 주어서 초기설정 시작
-```
+
+```         
  sudo vault operator init -address="http://127.0.0.1:8200"
 ```
+
 키와 토큰을 잘 저장한 후
 
-```bash
+``` bash
 vault operator unseal <UNSEAL_KEY>
 ```
 
 Sealed: false로 바뀐 것을 확인한 후
-

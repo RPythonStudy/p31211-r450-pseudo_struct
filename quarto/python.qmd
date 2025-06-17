@@ -1,0 +1,25 @@
+---
+title: "python 프로젝트 설정"
+description: ""
+author: "BenKorea"
+date: "2025-06-18"
+date-modified: last-modified
+---
+
+### 모듈 임포트 우선순위
+sys.path에 기록됩니다.
+0: 현재 디렉토리
+1: 표준 라이브러리 압축
+2: 표준 라이브러입
+3: 확장 라이브러리
+4: pip
+
+확인방법은
+``` bash
+python -c "import sys; print('\n'.join(f'{i}: {p}' for i, p in enumerate(sys.path)))"
+```
+
+예시로 main.py에서 logger 모듈을 임포할 때, main.py와 같은 경로에 logger가 있으므로 그대로 임포트하면 됩니다. sys.path[0]에 현재 디렉토리가 포함되어 있기 때문입니다.
+
+### 개발자 편집모드
+개발자 편집모드는 sys.path[4]에 src 디렉토리를 추가합니다. 이로 인해 src 디렉토리 내의 모듈을 임포트할 수 있습니다. 예를 들어, src/logger.py가 있다면, main.py에서 `from logger import logger`로 임포트할 수 있습니다.

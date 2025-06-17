@@ -1,4 +1,4 @@
-from fpe import FF3
+from FPE import FF3
 
 def test_fpe_encryption_decryption():
     key = b'0123456789abcdef'
