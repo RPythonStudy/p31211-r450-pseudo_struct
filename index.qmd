@@ -12,7 +12,3 @@ date-modified: last-modified
 source("_setup.R")
 
 ```
-
-
-
-
