@@ -1,4 +1,4 @@
-# {Pseudonymized Health Data Structuring Platform)
+# Pseudonymized Health Data Structuring Platform
 
 ## 개요
 
@@ -23,7 +23,7 @@
 ## 개발환경
 
 -   **운영체제:** Windows 10/11, WSL2 Ubuntu
--   **개발언어:** R (\>=4.5.0), Python (=3.10.14) FPE 패키지를 설치하기 위해 이 버전을 사용해야만 함
+-   **개발언어:** R (\>=4.5.0), Python (=3.12.11) python-fpe 패키지 호환 고려
 -   **IDE:** RStudio(rserver), VS Code
 -   **DB:** PostgreSQL
 -   **버전관리:** git & GitHub
