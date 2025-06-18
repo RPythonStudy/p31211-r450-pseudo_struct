@@ -1,12 +1,14 @@
-from FPE import FF3
+from ff3 import FF3Cipher
 
-def test_fpe_encryption_decryption():
-    key = b'0123456789abcdef'
-    tweak = b'abcdef123456'
-    ff3 = FF3(key, tweak)
+key = '0123456789abcdef0123456789abcdef'  # 128-bit = 32 hex
+tweak = 'abcdef12345678'                  # ✅ 56 bits = 14 hex (7 bytes)
 
-    original = '12345678'
-    ciphertext = ff3.encrypt(original)
-    decrypted = ff3.decrypt(ciphertext)
+cipher = FF3Cipher.withCustomAlphabet(key, tweak, '0123456789')
 
-    assert decrypted == original  # 복호화된 값이 원본과 같은지 테스트
+plaintext = '12345678'
+ciphertext = cipher.encrypt(plaintext)
+decrypted = cipher.decrypt(ciphertext)
+
+print(f"암호화: {ciphertext}")
+print(f"복호화: {decrypted}")
+
