@@ -16,11 +16,8 @@ install_requires = [
     "Pygments==2.19.1",
     "pytest==8.4.0",
     "PyYAML==6.0.2",
-    "Cython==3.1.2",
     "exceptiongroup==1.3.0",
-    "FPE==0.1.2",
     "numpy==2.2.6",
-    "pycryptodome==3.23.0",
     "pytest==8.4.0",
     "tomli==2.2.1",
     "typing_extensions==4.14.0"
