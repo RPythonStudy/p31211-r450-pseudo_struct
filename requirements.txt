@@ -1,9 +1,11 @@
+charset-normalizer==3.4.2
 exceptiongroup==1.3.0
 ff3 @ git+https://github.com/mysto/python-fpe.git@1dd20057e58218eaf024d1dc7c850b0ed7ec3c9f
 iniconfig==2.1.0
 numpy==2.2.6
 packaging==25.0
 pluggy==1.6.0
+-e git+ssh://git@github.com/RPythonStudy/p31211-r450-pseudo_struct.git@b229c070c16b2901409d5114ecb96c376f32702d#egg=pseudo_struct
 pycryptodome==3.23.0
 Pygments==2.19.1
 pytest==8.4.0

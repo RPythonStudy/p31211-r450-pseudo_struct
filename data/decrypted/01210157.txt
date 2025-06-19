@@ -1,0 +1,37 @@
+조직병리 검사 결과지
+출력자ID:00001903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    2025-06-13
+         병리번호:             B18-953991947 (복호화불완전, 역매핑 필요) 접 수 일:   2023-06-20 
+         환 자 명:            AAACFPMHVTUU      의뢰의사:    AAADKCQYVJPE      
+         등록번호:             01210157 의 뢰 과:   이비인후과    
+         성별/나이:            M / 50   병동/병실:   OO / OO  
+         외래/입원:            입원       결 과 일:   2023-06-23 
+
+상 병 :             -
+검 사 :             ( C5603 ) 조직병리검사 LEVEL C(파라핀블럭 1~9개)
+검 체 :             Lymph node
+
+
+ ◎ 육 안 소 견 :        담당의사 :          AAABOUCFLHSP
+#1: Subcutaneous mass.  Received is an excision specimen, measuring 1.0x0.6x0.5cm. On section, there is an encapsulated lesion filled with sebum-like material. Bisected and entirely embedded. #2: Lymph node levle 3 Lymph node found are all embedded. #3: Lymph node levle 5a #4: Lymph node levle 5b. Lymph node found are all embedded.      ** Frozen section diagnosis ** 1. Lymph node, left level 3-1 ; No tumor involvement (0/1) [고재수]        Received is a fresh lymph node.  Entirely embedded. 2. Lymph node, left level 3-2 ; No tumor involvement (0/1) [고재수]        Received is a fresh lymph node.  Entirely embedded. 3. Lymph node, left level 3-3 ; No tumor involvement (0/1) [고재수]        Received is a fresh lymph node.  Entirely embedded. 4. Lymph node, left level 5 ; Metastatic papillary thyroid carcinoma [고재수]        Received is a fresh lymph node.  Entirely embedded.  [ Block : 8    HE : 8    Frozen : 4 ]
+ ◎ 병 리 진 단 :               
+Soft tissue, labeled "subcutaneous mass", excision:      Epidermal inclusion cyst  Lymph node, left selective neck dissection:      Metastatic papillary thyroid carcinoma in two out of four lymph nodes      [level 3: 0/2, level 5a: 1/1, level 5b: 0/1, level 3 (frozen#1~frozen#3); 0/3, level 5 (frozen#4); 1/1]      (extranodal extension: absent)      (the maximum size of metastatic tumor: 5mm) 
+
+                                                      1 / 2
+조직병리 검사 결과지
+출력자ID:00001903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    2025-06-13
+         병리번호:             B18-953991947 (복호화불완전, 역매핑 필요) 접 수 일:   2023-06-20 
+         환 자 명:            AAACFPMHVTUU      의뢰의사:    AAADKCQYVJPE      
+         등록번호:             01210157 의 뢰 과:   이비인후과    
+         성별/나이:            M / 50   병동/병실:   OO / OO  
+         외래/입원:            입원       결 과 일:   2023-06-23 
+
+상 병 :             -
+검 사 :             ( C5603 ) 조직병리검사 LEVEL C(파라핀블럭 1~9개)
+검 체 :             Lymph node
+
+
+                  
+         결과 입력 : AAABOUCFLHSP 병리전문의 :  AAABOUCFLHSP
+                                                      2 / 2

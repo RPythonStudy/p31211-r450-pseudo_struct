@@ -1,0 +1,37 @@
+조직병리 검사 결과지
+출력자ID:73064385                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    2331-99-83
+         병리번호:             I29-319485729 접 수 일:   2843-21-18 
+         환 자 명:            AAADYJAKJLUG      의뢰의사:    AAADKCQYVJPE      
+         등록번호:             03209741 의 뢰 과:   이비인후과    
+         성별/나이:            F / 59   병동/병실:   OO / OO  
+         외래/입원:            입원       결 과 일:   2021-07-09 
+
+상 병 :             -
+검 사 :             ( C5605 ) 조직병리검사 LEVEL D(파라핀블럭 1~9개)
+검 체 :             Thyroid
+
+
+ ◎ 육 안 소 견 :        담당의사 :          AAABQEBJRPXP
+#1: Right thyroid. Received is a thyroid lobectomy specimen, measuring 4x2x2cm.  On serial section, there is no tumor. Representative sections are embedded. #2: Left thyroid. Received is a thyroid lobectomy specimen, measuring 4x2x1cm.  On serial section, there is a 0.9x0.9cm yellowish gray white rubbery nodular tumor. Remaining thyroid is unremarkable. Representative sections are embedded. #3: Pretracheal lymph node.  Entirely embedded. #4: Left paratracheal lymph node.  Entirely embedded.  ** Frozen section diagnosis ** 1.  Left paratracheal lymph node-1 ; Metastatic papillary carcinoma [설혜실]        Received is a fresh lymph node.  Entirely embedded. 2.  Left paratracheal lymph node-2 ; Metastatic papillary carcinoma [설혜실]        Received is a fresh lymph node.  Entirely embedded. 3.  Pretracheal lymph node ; Metastatic papillary carcinoma(1/2) [설혜실]        Received are fresh lymph nodes.  Entirely embedded.  [ Block : 11    HE : 11    Frozen : 3 ]
+ ◎ 병 리 진 단 :               
+Thyroid, total thyroidectomy:      1. Papillary carcinoma, left           with 1) tumor size: 0.9x0.9cm                  2) extrathyroidal extension: present                  3) muscle invasion: negative      2. No tumor involvement, right  Lymph node, central neck dissection:      Metastatic papillary carcinoma 3 lymph nodes      (perithyroidal: 0/0, pretracheal: 0/0, left paratracheal: 0/3, left paratracheal-1(frozen#1): 1/1,       left paratracheal-2(frozen#2): 1/1,  pretracheal(frozen#3): 1/2)
+                                                      1 / 2
+조직병리 검사 결과지
+출력자ID:73064385                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    2331-99-83
+         병리번호:             I29-319485729 접 수 일:   2843-21-18 
+         환 자 명:            AAADYJAKJLUG      의뢰의사:    AAADKCQYVJPE      
+         등록번호:             03209741 의 뢰 과:   이비인후과    
+         성별/나이:            F / 59   병동/병실:   OO / OO  
+         외래/입원:            입원       결 과 일:   2021-07-09 
+
+상 병 :             -
+검 사 :             ( C5605 ) 조직병리검사 LEVEL D(파라핀블럭 1~9개)
+검 체 :             Thyroid
+
+     (extranodal extension: present (frozen#1)) 
+   CR80-45287592   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.
+                  
+         결과 입력 : AAABQEBJRPXP 병리전문의 :  AAABQEBJRPXP
+                                                      2 / 2

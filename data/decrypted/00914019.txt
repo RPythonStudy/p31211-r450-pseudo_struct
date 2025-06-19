@@ -1,0 +1,23 @@
+조직병리 검사 결과지
+출력자ID:00001903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    2025-06-13
+         병리번호:             E09-593743344 (복호화불완전, 역매핑 필요) 접 수 일:  2010-12-23 
+         환 자 명:            AAACZTTSUJFL      의뢰의사:    AAADKCQYVJPE      
+         등록번호:             00914019 의 뢰 과:   이비인후과    
+         성별/나이:            F / 60   병동/병실:   OO / OO  
+         외래/입원:            입원       결 과 일:   2010-12-28 
+
+상 병 :             -
+검 사 :             ( C5500 ) 조직병리(악성종양,파라핀블록:15개 이하)
+검 체 :             Lymph node
+
+
+ ◎ 육 안 소 견 :        담당의사 :          AAADAJEIRMPI
+#1 Left level III.  Received is soft tissue, measuring 1.7x1x1cm.  On section, there are multiple enlarged lymph nodes.   Representative sections are embedded. #2 Left level IV.  Received is 3.5x1.2x1cm soft tissue.  Bissected and representative sections are embedded.  ** Frozen section diagnosis ** 1. Left level III ; Metastatic papillary carcinoma [설혜실]  [ Block : 3    HE : 3    Frozen : 1 ]
+ ◎ 병 리 진 단 :               
+Lymph node, left, selective neck dissecion;      Metastatic papillary carcinoma in one out of five lymph nodes      (#left level III; 0/4, Fro#1: 1/1, #left level IV; 0/0)
+
+                                    
+         결과 입력 : AAADAJEIRMPI 병리전문의 :  조수연/박선후
+
+                                                      1 / 1
