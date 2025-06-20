@@ -1,0 +1,159 @@
+---
+title: "가명화"
+description: ""
+author: "BenKorea feat Copilot"
+date: "2025-06-20"
+date-modified: last-modified
+---
+
+## 로그설정
+
+R에서도 로그레벨에 따른 출력설정이 가능하므로 이 프로젝트에서 logger chunk에서 이를 구현하였습니다. 이를 위해서는 미리 .Rprofile에 코딩하는 등의 사전준비가 필요하므로 지금은 단순히 - log_debug() - log_info() - log_warn() - log_error() 중에 하나를 선택하여 메시지를 출력함으로써 프로그램의 진행상황과 오류 메시지를 체계적으로 관리할 수 있도록 하였습니다.
+
+```{r}
+#| label: logger
+
+if (!requireNamespace("logger", quietly = TRUE)) install.packages("logger")
+library(logger)
+
+```
+
+## 파일 읽어오기
+
+list.files를 이용해서 파일이름들을 리스트로 가져오는 가장 일반적인 방식입니다. 향후 진행될 가명화를 위해서 파일이름 리스트에서 확장자를 제거한 후, register_numbers라는 문자형 벡터(character vector)로 생성합니다.
+
+```{r}
+#| label: path
+
+file_list <- list.files("../data/raw", pattern = "\\.txt$")
+register_numbers <- tools::file_path_sans_ext(file_list)
+log_info("등록번호 추출 완료: {paste(register_numbers, collapse=', ')}")
+```
+
+## 파일이름 가명화
+
+본 프로젝트에서는 파일명이 등록번호로 구성되어 있다고 가정합니다. 따라서 파일명을 가명화하는 과정이 필요합니다. 가명화 방식으로는 가역적이며 일관성을 보장하는 가명화(reversible deterministic pseudonymization)를 채택하였습니다. 이를 위해 원본 형식을 유지하는 형식보존암호화(format-preserving encryption)를 적용하였으며, 미국 NIST에서 권장하는 알고리즘을 구현한 FF3 파이썬 패키지를 활용하였습니다.
+
+```{r}
+#| label: ff3
+
+if (!requireNamespace("reticulate", quietly = TRUE)) install.packages("reticulate")
+library(reticulate)
+
+# 파이썬 모듈 임포트
+ff3 <- import("ff3")
+
+# FF3Cipher 객체 생성 (키, 트윅, 알파벳은 파이썬과 동일하게 지정)
+KEY <- "0123456789abcdef0123456789abcdef"
+TWEAK <- "abcdef12345678"
+ALPHABET <- "0123456789"
+cipher <- ff3$FF3Cipher$withCustomAlphabet(KEY, TWEAK, ALPHABET)
+
+# 등록번호 벡터를 FF3로 가명화
+pseudonym_list <- sapply(register_numbers, cipher$encrypt)
+log_info("가명화된 등록번호: {paste(pseudonym_list, collapse=', ')}")
+
+# 결과 확인
+result_df <- data.frame(
+  original_id = register_numbers,
+  pseudonym = pseudonym_list,
+  stringsAsFactors = FALSE
+)
+```
+
+## 파일이름 복호화
+
+```{r}
+#| label: ff3-decrypt
+
+# FF3Cipher 객체는 이미 생성되어 있다고 가정합니다.
+# (cipher <- ff3$FF3Cipher$withCustomAlphabet(KEY, TWEAK, ALPHABET))
+
+# 복호화: pseudonym_list를 원본으로 되돌리기
+decrypted_list <- sapply(pseudonym_list, cipher$decrypt)
+
+# 복호화 결과 확인
+result_df$decrypted <- decrypted_list
+print(result_df)
+```
+
+## 복호화 검증
+
+```{r}
+#| label: ff3-verify
+
+# 복호화 결과가 원본과 동일한지 검증
+all_equal <- all(result_df$original_id == result_df$decrypted)
+if (all_equal) {
+  log_success("복호화 결과가 원본과 완전히 일치합니다.")
+} else {
+  log_error("복호화 결과와 원본이 일치하지 않는 값이 있습니다.")
+  print(result_df[result_df$original_id != result_df$decrypted, ])
+}
+```
+
+## 파일 내용 읽어오기
+
+이 단계에서는 가명화된 파일명과 매칭되는 원본 파일의 내용을 읽어옵니다.\
+파일마다 인코딩이 다를 수 있으므로, 인코딩 자동 감지 및 변환을 함께 처리하는 것이 좋습니다.
+
+```{r}
+#| label: read-content
+#| eval: false
+
+if (!requireNamespace("stringi", quietly = TRUE)) install.packages("stringi")
+library(stringi)
+
+# 파일 경로 벡터 생성
+file_paths <- file.path("data/raw", file_list)
+
+# 인코딩 감지 없이 UTF-8로 처리 (실패 시 깨질 수 있음)
+read_file_content <- function(path) {
+  content <- stringi::stri_read_lines(path, encoding = "UTF-8")  # 인코딩 고정
+  paste(content, collapse = "\n")
+}
+
+file_contents <- lapply(file_paths, read_file_content)
+
+# 데이터프레임에 내용 추가
+result_df$content <- file_contents
+
+# 일부 결과 확인
+print(result_df[, c("original_id", "pseudonym", "content")])
+```
+
+하지만 위 코드에서 encoding을 "UTF-8"로 지정하면 stringi::stri_read_lines 함수에서 오류가 발생할 수 있으므로, 인코딩을 자동 감지하도록 아래와 같이 수정해야 합니다.
+
+```{r}
+#| label: read-content-corrected
+#| eval: true
+
+
+if (!requireNamespace("stringi", quietly = TRUE)) install.packages("stringi")
+library(stringi)
+
+# 파일 경로 벡터 생성
+file_paths <- file.path("data/raw", file_list)
+
+# 인코딩 감지 후 해당 인코딩으로 파일 읽기 및 로그 기록 (glue 문법 사용)
+read_file_content <- function(path) {
+  raw_bytes <- readBin(path, what = "raw", n = file.info(path)$size)
+  detected <- stringi::stri_enc_detect(raw_bytes)[[1]]
+  best <- detected[1, ]
+  log_info("파일 [{path}]의 감지된 인코딩: {best$Encoding} (신뢰도: {round(best$Confidence, 2)})")
+  content <- stringi::stri_read_lines(path, encoding = best$Encoding)
+  paste(content, collapse = "\n")
+}
+
+file_contents <- lapply(file_paths, read_file_content)
+
+# 데이터프레임에 내용 추가
+result_df$content <- file_contents
+
+# 총 파일 개수 로그로 출력
+log_success("총 {length(file_paths)}개의 파일을 성공적으로 읽었습니다.")
+```
+
+```{r the_end}
+
+```

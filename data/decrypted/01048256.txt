@@ -1,10 +1,10 @@
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             I62-671222197 (복호화불완전, 역매핑 필요) 접 수 일:   2011-04-13 
-         환 자 명:            AAAABODOZSJV      의뢰의사:    AAADKCQYVJPE      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S11-4028 (복호화불완전, 역매핑 필요) 접 수 일:   7863-61-02 
+         환 자 명:            김미순      의뢰의사:    이병철      
          등록번호:             01048256 의 뢰 과:   이비인후과    
-         성별/나이:            F / 44   병동/병실:   OO / OO  
+         성별/나이:            F / 44   병동/병실:   A8 / 55  
          외래/입원:            입원       결 과 일:   2011-04-18 
 
 상 병 :             -
@@ -12,20 +12,22 @@
 검 체 :             Thyroid
 
 
- ◎ 육 안 소 견 :        담당의사 :          AAAECELRNZET
+ ◎ 육 안 소 견 :        담당의사 :          설혜실
 #1. Right thyroid.  Received is a right thyroid lobectomy specimen, measuring 6x3.5x3cm and weighing 10.8gm. On serial section, a 0.5x0.3cm-sized ill defined yellow site tumor is identified at lower isthmic portion.  Representative sections are embedded. <1-1, 1-2; tumor, 1-3; surrounding parenchyma> #2. Left hyroid.  Received is a left thyroid lobectomy specimen, measuring 4.5x2x1.7cm and weighing 6.7gm. On serial section, there is no definite tumor like lesion.  Representative sections are embedded. #3. Right paratracheal lymph node. #4. Left paratracheal lymph node.  ** Frozen section diagnosis ** 1.  Pretracheal lymph node ; Adipose tissue with no tumor involvement [설혜실] 2.  Right paratracheal lymph node ; Metastatic papillary carcinoma [설혜실] 3.  Right paratracheal lymph node ; No tumor involvement [설혜실]  [ Block : 9    HE : 9    Frozen : 3    IHC : 3 ]
  ◎ 병 리 진 단 :               
 Thyroid, total thyroidectomy:    Papillary microcarcinomas(x2), right         with 1) tumor size; 0.5x0.3cm and 0.2x0.2cm                2) no extrathyroidal extension        Lymph node, central neck dissection:    Metastatic papillary carcinoma in two out of nine lymph nodes with no extranodal extension    (#3; 1/3, #4; 0/3, Fro#1; 0/0, Fro#2; 1/2, Fro#3; 0/1))        Note) One parathyroid gland is included in left perithyroidal soft tissue.
-   AJ27-22296622   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.   I11-3198   Muc-1 ( Muc-1 glycoprotein )   [1-1]   :  Negative(-)
+   SA11-1090 (복호화불완전, 역매핑 필요)   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.   I11-3198   Muc-1 ( Muc-1 glycoprotein )   [1-1]   :  Negative(-)
 
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       1 / 2
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             I62-671222197 (복호화불완전, 역매핑 필요) 접 수 일:   2011-04-13 
-         환 자 명:            AAAABODOZSJV      의뢰의사:    AAADKCQYVJPE      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S11-4028 (복호화불완전, 역매핑 필요) 접 수 일:   7863-61-02 
+         환 자 명:            김미순      의뢰의사:    이병철      
          등록번호:             01048256 의 뢰 과:   이비인후과    
-         성별/나이:            F / 44   병동/병실:   OO / OO  
+         성별/나이:            F / 44   병동/병실:   A8 / 55  
          외래/입원:            입원       결 과 일:   2011-04-18 
 
 상 병 :             -
@@ -34,6 +36,8 @@ Thyroid, total thyroidectomy:    Papillary microcarcinomas(x2), right         wi
 
    I11-3199   Ki-67   [1-1]   :  Positive(+), 1%    I11-3200   Cyclin D1   [1-1]   :  Positive(+), 30%    M11-803   BRAF 유전자 돌연변이 염기서열   [1-1]   :    * ANALYSIS METHOD *    - PCR     조직이나 세포에서 genomic DNA를 추출하고 BRAF gene exon15  부위를 Sequencing용으로 증폭한다.    - SEQUENCING      SNP : Biotage사의 PyroMark ID를 이용하여 BRAF gene exon15 codon 600의 Point mutation 분석한다.
                   
-         결과 입력 : AAAECELRNZET 병리전문의 :  설혜실/고재수
+         결과 입력 : 설혜실 병리전문의 :  설혜실/고재수
 
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       2 / 2

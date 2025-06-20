@@ -1,10 +1,10 @@
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             J57-696059295 (복호화불완전, 역매핑 필요) 접 수 일:  2016-12-29 
-         환 자 명:            AAAENPSQYBIW      의뢰의사:    AAABCRKOFNUR      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S16-15569 (복호화불완전, 역매핑 필요) 접 수 일:  6080-92-54 
+         환 자 명:            윤막래      의뢰의사:    최익준      
          등록번호:             00904267 의 뢰 과:   이비인후과    
-         성별/나이:            F / 67   병동/병실:   OO / OO  
+         성별/나이:            F / 67   병동/병실:   A8 / 57  
          외래/입원:            입원       결 과 일:   2017-01-03 
 
 상 병 :             -
@@ -12,28 +12,32 @@
 검 체 :             Thyroid
 
 
- ◎ 육 안 소 견 :        담당의사 :          AAAAJDUKPVUI
+ ◎ 육 안 소 견 :        담당의사 :          한강희
 #1 Right thyroid.  Received is a right lobe of thyroid, measuring 3.7x2.7x1.0cm and 6.7gm.  Outer surface is relatively smooth.  Cross section reveals a relatively well circumscribed small round gray to whitish lesion, measuring 1.6x1.1x0.9cm, in the parenchyma, which very close to the soft tissue resection margin.  The lesion has infiltrative border and firm gritty cut surface.  Remaining thyroid is grossly unremarkable.  Representative sections are embedded. <1-1,1-2; tumor, 1-3; remaining> #2 Left thyroid.  Received is a left lobe of thyroid, measuring 4.0x2.5x1.1cm and 5.6gm.  On serial section, there is no definite tumor like lesion. Representative sections are embedded. <2-1,2-2; random section> #3 Right paratracheal lymph node. Entirely embedded.  ** Frozen section diagnosis ** <Frozen #1> Received is a lump of fresh soft tissue, measuring 0.7x0.5cm.  Entirely embedded.    Right thyroid ; Papillary carcinoma [고재수] <Frozen #2> Received are six lymph nodes.  Entirely embedded.    Right paratracheal lymph node ; No tumor involvement [고재수]  [ Block : 8    HE : 8    Frozen : 2    IHC : 2 ]
  ◎ 병 리 진 단 :               
 Thyroid, total thyroidectomy:       Papillary carcinoma, right lobe           with 1) tumor size: 1.6x1.1x0.9cm                  2) extrathyroidal extension: present                   3) muscle invasion: negative            Lymph node, central neck dissection:      No metastasis in lymph nodes      (right paratracheal: 0/0, right paratracheal(frozen #2): 0/6)
 
 
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       1 / 2
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             J57-696059295 (복호화불완전, 역매핑 필요) 접 수 일:  2016-12-29 
-         환 자 명:            AAAENPSQYBIW      의뢰의사:    AAABCRKOFNUR      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S16-15569 (복호화불완전, 역매핑 필요) 접 수 일:  6080-92-54 
+         환 자 명:            윤막래      의뢰의사:    최익준      
          등록번호:             00904267 의 뢰 과:   이비인후과    
-         성별/나이:            F / 67   병동/병실:   OO / OO  
+         성별/나이:            F / 67   병동/병실:   A8 / 57  
          외래/입원:            입원       결 과 일:   2017-01-03 
 
 상 병 :             -
 검 사 :             ( C5918 ) 조직병리(악성종양,림프절청소포함,파라핀블록 20개 이하)
 검 체 :             Thyroid
 
-  BE01-65310903   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.   I17-60   CK19 ( Cytokeratin 19 )   [1-2]   :  Positive(+)    I17-61   Cyclin D1   [1-2]   :  Positive(+), 30%
+  SA16-3492 (복호화불완전, 역매핑 필요)   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.   I17-60   CK19 ( Cytokeratin 19 )   [1-2]   :  Positive(+)    I17-61   Cyclin D1   [1-2]   :  Positive(+), 30%
                   
-         결과 입력 : AAAAJDUKPVUI 병리전문의 :  박선후/고재수
+         결과 입력 : 한강희 병리전문의 :  박선후/고재수
 
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       2 / 2

@@ -1,10 +1,10 @@
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             J90-097943835 (복호화불완전, 역매핑 필요) 접 수 일:   2022-07-06 
-         환 자 명:            AAACZQGQSIHY      의뢰의사:    AAAENEUTHATK      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S22-6797 (복호화불완전, 역매핑 필요) 접 수 일:   1768-55-30 
+         환 자 명:            신동국      의뢰의사:    이명철      
          등록번호:             00991139 의 뢰 과:   이비인후과    
-         성별/나이:            M / 67   병동/병실:   OO / OO  
+         성별/나이:            M / 67   병동/병실:   A8 / 51  
          외래/입원:            입원       결 과 일:   2022-07-11 
 
 상 병 :             -
@@ -12,25 +12,31 @@
 검 체 :             Thyroid
 
 
- ◎ 육 안 소 견 :        담당의사 :          AAADDSMXELTN
+ ◎ 육 안 소 견 :        담당의사 :          박선후
 #1: Left thyroid.  Received is a left lobe of thyroid, measuring 5.0x3.0x1.5cm, and weighing 9.8gm.  On serial section, there is no mass like lesion.  Thyroid parenchyma shows partly whitish nodular change.  Representative sections are embedded. <1-1, 1-3; random section>   #2: Left paratracheal lymph node.  Entirely embedded. #3: Right level 2, 3 lymph node.  Entirely embedded. #4: Rigth level 4 lymph node.  Entirely embedded.   [ Block : 6    HE : 6 ]
  ◎ 병 리 진 단 :               
 Thyroid, left, completion lobectomy:       Hashimoto's thyroiditis             [see Note]            Lymph node, central neck dissection:      No metastasis in 4 lymph nodes  Lymph node, neck dissection:      Metastatic papillary thyroid carcinoma in two out of 21 lymph nodes      (right level ll, lll:1/11 , right level lV:1/10)      (extranodal extension:absent)  Note) One parathyroid gland is included.
-   BS87-83093303   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.
+   SA22-1737 (복호화불완전, 역매핑 필요)   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.
                                     
+이 결과지는 전자서명법에 의하여 전자서명된 문서입니다.
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       1 / 2
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             J90-097943835 (복호화불완전, 역매핑 필요) 접 수 일:   2022-07-06 
-         환 자 명:            AAACZQGQSIHY      의뢰의사:    AAAENEUTHATK      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S22-6797 (복호화불완전, 역매핑 필요) 접 수 일:   1768-55-30 
+         환 자 명:            신동국      의뢰의사:    이명철      
          등록번호:             00991139 의 뢰 과:   이비인후과    
-         성별/나이:            M / 67   병동/병실:   OO / OO  
+         성별/나이:            M / 67   병동/병실:   A8 / 51  
          외래/입원:            입원       결 과 일:   2022-07-11 
 
 상 병 :             -
 검 사 :             ( C5605 ) 조직병리검사 LEVEL D(파라핀블럭 1~9개)
 검 체 :             Thyroid
 
-         결과 입력 : AAADDSMXELTN 병리전문의 :  AAADDSMXELTN
+         결과 입력 : 박선후 병리전문의 :  박선후
+이 결과지는 전자서명법에 의하여 전자서명된 문서입니다.
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       2 / 2

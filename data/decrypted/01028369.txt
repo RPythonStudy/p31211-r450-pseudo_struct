@@ -1,10 +1,10 @@
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             D74-298209247 (복호화불완전, 역매핑 필요) 접 수 일:   2010-05-07 
-         환 자 명:            AAABARSGKVCH      의뢰의사:    AAADKCQYVJPE      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S10-4550 (복호화불완전, 역매핑 필요) 접 수 일:   7400-50-81 
+         환 자 명:            신점순      의뢰의사:    이병철      
          등록번호:             01028369 의 뢰 과:   이비인후과    
-         성별/나이:            F / 56   병동/병실:   OO / OO  
+         성별/나이:            F / 56   병동/병실:   A8 / 55  
          외래/입원:            입원       결 과 일:   2010-05-17 
 
 상 병 :             -
@@ -12,28 +12,32 @@
 검 체 :             
 
 
- ◎ 육 안 소 견 :        담당의사 :          AAAEEWOZUIIG
+ ◎ 육 안 소 견 :        담당의사 :          최희승
 #1 Right thyroid measures 3.8x1.7x2.0cm and 7.2gm.  On serial section, there is a relatively well circumscribed ovoid whitish lesion, measuring 0.9x0.6cm. It involves thyroid capsule, grossly.  The lesion has infiltrative border and firm gritty cut surface. Remaining thyroid is grossly unremarkable.  Representative sections are embedded. <1-1, 1-2; tumor, 1-3; 0.3cm-sized separate nodule> #2 Left thyroid measures 3.5x2x2cm and 6.4gm.  On serial section, there is no definite tumor-like lesion. Representative sections are embedded. #3 Right paratracheal LN.  ** Frozen section diagnosis ** 1. right paratracheal lymph nodes ; metastatic papillary carcinoma [박선후]  [ Block : 7    HE : 7    Frozen : 1    IHC : 4 ]
  ◎ 병 리 진 단 :               
 Thyroid, total thyroidectomy:     1. Papillary microcarcinoma, right         with 1) tumor size; 0.9x0.6cm                2) extrathyroidal extension          2. Papillary microcarcinoma, right         with 1) tumor size; 0.3x0.2cm                2) no extrathyroidal extension             Lymph node, central neck dissection:    Metastatic papillary carcinoma in three out of 4 lymph nodes    (#3; 1/2, Frozen; 2/2)  Note) One parathyroid gland is included.
 
 
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       1 / 2
 조직병리 검사 결과지
-출력자ID:00001903                                                                                PGM_ID : SPR100F1
-                                                                                          출력일 :    2025-06-13
-         병리번호:             D74-298209247 (복호화불완전, 역매핑 필요) 접 수 일:   2010-05-07 
-         환 자 명:            AAABARSGKVCH      의뢰의사:    AAADKCQYVJPE      
+출력자ID:1903                                                                                PGM_ID : SPR100F1
+                                                                                          출력일 :    4842-29-74
+         병리번호:             S10-4550 (복호화불완전, 역매핑 필요) 접 수 일:   7400-50-81 
+         환 자 명:            신점순      의뢰의사:    이병철      
          등록번호:             01028369 의 뢰 과:   이비인후과    
-         성별/나이:            F / 56   병동/병실:   OO / OO  
+         성별/나이:            F / 56   병동/병실:   A8 / 55  
          외래/입원:            입원       결 과 일:   2010-05-17 
 
 상 병 :             -
 검 사 :             ( C5918 ) 조직병리(악성종양,림프절청소포함,파라핀블록 20개 이하)
 검 체 :             
 
-   BT69-06266163   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.   I10-3990   Ki-67   [1-1]   : 2%    I10-3991   Muc-1 ( Muc-1 glycoprotein )   [1-1]   : 90%    I10-3992   CK19 ( Cytokeratin 19 )   [1-1]   :  Positive(+)    I10-3993   Cyclin D1   [1-1]   : 20%
+   SA10-1396 (복호화불완전, 역매핑 필요)   육안사진촬영   : *육안사진은 PACS 에서 확인하시기 바랍니다.   I10-3990   Ki-67   [1-1]   : 2%    I10-3991   Muc-1 ( Muc-1 glycoprotein )   [1-1]   : 90%    I10-3992   CK19 ( Cytokeratin 19 )   [1-1]   :  Positive(+)    I10-3993   Cyclin D1   [1-1]   : 20%
                   
-         결과 입력 : AAAENLJQYRLT 병리전문의 :  고재수/이승숙
+         결과 입력 : 서화석 병리전문의 :  고재수/이승숙
 
+ 한국원자력의학원  원자력병원  병리과                                       판독실 : 970-2545 서울특별시 노원구 노원로 75 (공릉동)
+         본 문서는 중요 자산이므로 무단으로 수정 및 복사를 할 수 없습니다.                                                     검사실 : 970-2541
                                                       2 / 2
