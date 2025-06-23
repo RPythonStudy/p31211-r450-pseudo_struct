@@ -19,5 +19,12 @@
     "title": "p3135-r450-template",
     "section": "",
     "text": "source(\"_setup.R\")\n\nhere() starts at /home/ben/projects/p3135-r450-pseudo_struct\n\n\nINFO [2025-06-16 09:47:10] 📄 사용자 정의 함수 로드 완료 (fs::dir_ls + source)"
+  },
+  {
+    "objectID": "quarto/secret-management.html",
+    "href": "quarto/secret-management.html",
+    "title": "Secret Management",
+    "section": "",
+    "text": "test\n\nSecret Management"
   }
 ]
