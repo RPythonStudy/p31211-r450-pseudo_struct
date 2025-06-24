@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="BenKorea">
-<meta name="dcterms.date" content="2025-06-18">
+<meta name="author" content="BenKorea feat Copilot">
+<meta name="dcterms.date" content="2025-06-20">
 
-<title>Vault 설치 및 설정 – Pseudo_Struct</title>
+<title>가명화 – 가명화 프로젝트</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -115,7 +115,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">Pseudo_Struct</span>
+    <span class="navbar-title">가명화 프로젝트</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -126,16 +126,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../index.html"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">블로그</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../quarto/vault.html" aria-current="page"> 
-<span class="menu-text">개인정보보호</span></a>
-  </li>  
-  <li class="nav-item">
-    <span class="nav-link">
-<span class="menu-text">about.qmd</span>
-    </span>
+    <a class="nav-link" href="../posts/development/development.html"> 
+<span class="menu-text">개발기록</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -153,10 +148,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#개인정보보호" id="toc-개인정보보호" class="nav-link active" data-scroll-target="#개인정보보호">개인정보보호</a></li>
-  <li><a href="#hashcorp-vault" id="toc-hashcorp-vault" class="nav-link" data-scroll-target="#hashcorp-vault">HashCorp Vault</a></li>
-  <li><a href="#설치" id="toc-설치" class="nav-link" data-scroll-target="#설치">설치</a></li>
-  <li><a href="#최초설정" id="toc-최초설정" class="nav-link" data-scroll-target="#최초설정">최초설정</a></li>
+  <li><a href="#로그설정" id="toc-로그설정" class="nav-link active" data-scroll-target="#로그설정">로그설정</a></li>
+  <li><a href="#파일-읽어오기" id="toc-파일-읽어오기" class="nav-link" data-scroll-target="#파일-읽어오기">파일 읽어오기</a></li>
+  <li><a href="#파일이름-가명화" id="toc-파일이름-가명화" class="nav-link" data-scroll-target="#파일이름-가명화">파일이름 가명화</a></li>
+  <li><a href="#파일이름-복호화" id="toc-파일이름-복호화" class="nav-link" data-scroll-target="#파일이름-복호화">파일이름 복호화</a></li>
+  <li><a href="#복호화-검증" id="toc-복호화-검증" class="nav-link" data-scroll-target="#복호화-검증">복호화 검증</a></li>
+  <li><a href="#파일-내용-읽어오기" id="toc-파일-내용-읽어오기" class="nav-link" data-scroll-target="#파일-내용-읽어오기">파일 내용 읽어오기</a></li>
   </ul>
 </nav>
     </div>
@@ -165,7 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Vault 설치 및 설정</h1>
+<h1 class="title">가명화</h1>
 </div>
 
 
@@ -175,14 +172,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>BenKorea </p>
+             <p>BenKorea feat Copilot </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 18, 2025</p>
+      <p class="date">June 20, 2025</p>
     </div>
   </div>
   
@@ -200,139 +197,133 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="개인정보보호" class="level3">
-<h3 class="anchored" data-anchor-id="개인정보보호">개인정보보호</h3>
-<ul>
-<li><p><strong>의무기록시스템(EMR)으로부터 추출된 의료정보는 중앙 로깅 서버에 모든 접근 및 다운로드 이력이 기록되어야 한다.</strong></p></li>
-<li><p><strong>가명화 또는 익명화 조치를 수행하는 책임자는 해당 조치의 수행 이력 및 방식에 대한 기록(log)을 남겨야 하며, 이 기록은 감사를 위해 보존되어야 한다.</strong></p></li>
-<li><p><strong>임상연구를 위해 가명화된 환자 식별자는 동일 환자의 반복 가명화 시에도 일관되게 동일한 가명 식별자로 생성되어야 하며, 이를 통해 시간대별 또는 다기관 간 데이터 통합 및 분석이 가능하도록 해야 한다.</strong></p></li>
-<li><p><strong>가명화된 정보는 적법한 원내 승인 절차(예: 연구윤리위원회(IRB) 승인 등)에 따른 요청이 있을 경우, 정당한 목적 하에 원 식별자에 대한 역추적이 가능하도록 체계가 마련되어야 한다.</strong></p></li>
-</ul>
-</section>
-<section id="hashcorp-vault" class="level3">
-<h3 class="anchored" data-anchor-id="hashcorp-vault">HashCorp Vault</h3>
-<p>이 프로젝트에서는 가명화를 위해 HashCorp Vault를 사용하며, 가명화(익명화)담당자가 HashCorp Vault를 사용하여 가명화 키를 관리한다고 가정하였다.</p>
-</section>
-<section id="설치" class="level3">
-<h3 class="anchored" data-anchor-id="설치">설치</h3>
-<p>운영체제별로… 여기서는 wsl2 ubuntu</p>
-<section id="시스템-그룹으로-등록" class="level4">
-<h4 class="anchored" data-anchor-id="시스템-그룹으로-등록">시스템 그룹으로 등록</h4>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> groupadd <span class="at">--system</span> vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>그룹목록을 확인</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getent</span> group</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="시스템사용자로-등록" class="level4">
-<h4 class="anchored" data-anchor-id="시스템사용자로-등록">시스템사용자로 등록</h4>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> useradd <span class="at">--system</span> <span class="at">--home</span> /etc/vault <span class="at">--shell</span> /bin/false <span class="at">--gid</span> vault vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getent</span> passwd vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="hashicorp-gpg-키-등록" class="level4">
-<h4 class="anchored" data-anchor-id="hashicorp-gpg-키-등록">1. HashiCorp GPG 키 등록</h4>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-fsSL</span> https://apt.releases.hashicorp.com/gpg <span class="kw">|</span> <span class="fu">sudo</span> gpg <span class="at">--dearmor</span> <span class="at">-o</span> /usr/share/keyrings/hashicorp-archive-keyring.gpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="hashicorp-저장소-추가" class="level4">
-<h4 class="anchored" data-anchor-id="hashicorp-저장소-추가">2. HashiCorp 저장소 추가</h4>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com </span><span class="va">$(</span><span class="ex">lsb_release</span> <span class="at">-cs</span><span class="va">)</span><span class="st"> main"</span> <span class="kw">|</span> <span class="fu">sudo</span> tee /etc/apt/sources.list.d/hashicorp.list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="패키지-정보-갱신" class="level4">
-<h4 class="anchored" data-anchor-id="패키지-정보-갱신">3. 패키지 정보 갱신</h4>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="vault-설치" class="level4">
-<h4 class="anchored" data-anchor-id="vault-설치">4. Vault 설치</h4>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="설치검증" class="level4">
-<h4 class="anchored" data-anchor-id="설치검증">설치검증</h4>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vault</span> <span class="at">-v</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>cf) vault -version 명령은 실행되지 않으니 주의를 요한다.</p>
-</section>
-<section id="필수-디렉토리-권한설정" class="level4">
-<h4 class="anchored" data-anchor-id="필수-디렉토리-권한설정">필수 디렉토리 권한설정</h4>
-<p>설정파일용</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /etc/vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>데이터 스토리지용</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /var/lib/vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>데이터 스토리지용</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> mkdir <span class="at">-p</span> /var/log/vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>재귀적으로 권한설정</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown <span class="at">-R</span> vault:vault /etc/vault /var/lib/vault /var/log/vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 700 /etc/vault /var/lib/vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-<section id="설정파일-만들기" class="level4">
-<h4 class="anchored" data-anchor-id="설정파일-만들기">설정파일 만들기</h4>
+<section id="로그설정" class="level2">
+<h2 class="anchored" data-anchor-id="로그설정">로그설정</h2>
+<p>R에서도 로그레벨에 따른 출력설정이 가능하므로 이 프로젝트에서 logger chunk에서 이를 구현하였습니다. 이를 위해서는 미리 .Rprofile에 코딩하는 등의 사전준비가 필요하므로 지금은 단순히 - log_debug() - log_info() - log_warn() - log_error() 중에 하나를 선택하여 메시지를 출력함으로써 프로그램의 진행상황과 오류 메시지를 체계적으로 관리할 수 있도록 하였습니다.</p>
 <div class="cell">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>vault.hcl</strong></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"logger"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">"logger"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(logger)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># /etc/vault/vault.hcl</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) 스토리지 백엔드</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="ex">storage</span> <span class="st">"file"</span> {</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="ex">path</span> = <span class="st">"/var/lib/vault"</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) 리스너 (TLS 적용 권장)</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="ex">listener</span> <span class="st">"tcp"</span> {</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="ex">address</span>     = <span class="st">"0.0.0.0:8200"</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="ex">tls_disable</span> = 1            <span class="co"># 운영환경에서는 tls_disable = 0 과 cert/key 설정 사용</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) UI 활성화</span></span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="ex">ui</span> = true</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 4) 감사로그 (선택)</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="ex">audit</span> <span class="st">"file"</span> {</span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="ex">file_path</span> = <span class="st">"/var/log/vault/audit.log"</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="ex">log_raw</span>   = true</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="er">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="파일-읽어오기" class="level2">
+<h2 class="anchored" data-anchor-id="파일-읽어오기">파일 읽어오기</h2>
+<p>list.files를 이용해서 파일이름들을 리스트로 가져오는 가장 일반적인 방식입니다. 향후 진행될 가명화를 위해서 파일이름 리스트에서 확장자를 제거한 후, register_numbers라는 문자형 벡터(character vector)로 생성합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>file_list <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"../data/raw"</span>, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.txt$"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>register_numbers <span class="ot">&lt;-</span> tools<span class="sc">::</span><span class="fu">file_path_sans_ext</span>(file_list)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">log_info</span>(<span class="st">"등록번호 추출 완료: {paste(register_numbers, collapse=', ')}"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="파일이름-가명화" class="level2">
+<h2 class="anchored" data-anchor-id="파일이름-가명화">파일이름 가명화</h2>
+<p>본 프로젝트에서는 파일명이 등록번호로 구성되어 있다고 가정합니다. 따라서 파일명을 가명화하는 과정이 필요합니다. 가명화 방식으로는 가역적이며 일관성을 보장하는 가명화(reversible deterministic pseudonymization)를 채택하였습니다. 이를 위해 원본 형식을 유지하는 형식보존암호화(format-preserving encryption)를 적용하였으며, 미국 NIST에서 권장하는 알고리즘을 구현한 FF3 파이썬 패키지를 활용하였습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"reticulate"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">"reticulate"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(reticulate)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 파이썬 모듈 임포트</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>ff3 <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="st">"ff3"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># FF3Cipher 객체 생성 (키, 트윅, 알파벳은 파이썬과 동일하게 지정)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>KEY <span class="ot">&lt;-</span> <span class="st">"0123456789abcdef0123456789abcdef"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>TWEAK <span class="ot">&lt;-</span> <span class="st">"abcdef12345678"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>ALPHABET <span class="ot">&lt;-</span> <span class="st">"0123456789"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>cipher <span class="ot">&lt;-</span> ff3<span class="sc">$</span>FF3Cipher<span class="sc">$</span><span class="fu">withCustomAlphabet</span>(KEY, TWEAK, ALPHABET)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># 등록번호 벡터를 FF3로 가명화</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>pseudonym_list <span class="ot">&lt;-</span> <span class="fu">sapply</span>(register_numbers, cipher<span class="sc">$</span>encrypt)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">log_info</span>(<span class="st">"가명화된 등록번호: {paste(pseudonym_list, collapse=', ')}"</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co"># 결과 확인</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>result_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">original_id =</span> register_numbers,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">pseudonym =</span> pseudonym_list,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="파일이름-복호화" class="level2">
+<h2 class="anchored" data-anchor-id="파일이름-복호화">파일이름 복호화</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># FF3Cipher 객체는 이미 생성되어 있다고 가정합니다.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (cipher &lt;- ff3$FF3Cipher$withCustomAlphabet(KEY, TWEAK, ALPHABET))</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 복호화: pseudonym_list를 원본으로 되돌리기</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>decrypted_list <span class="ot">&lt;-</span> <span class="fu">sapply</span>(pseudonym_list, cipher<span class="sc">$</span>decrypt)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 복호화 결과 확인</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>result_df<span class="sc">$</span>decrypted <span class="ot">&lt;-</span> decrypted_list</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] original_id decrypted  
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
 </div>
 </div>
-<p>설정파일에 대한 사용자 및 권한설정</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown vault:vault /etc/vault/vault.hcl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 640 /etc/vault/vault.hcl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="systemd" class="level4">
-<h4 class="anchored" data-anchor-id="systemd">systemd</h4>
-<p>/etc/systemd/system/vault.service 를 다음과 같이 작성</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">[Unit]</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="va">Description</span><span class="op">=</span>HashiCorp <span class="ex">Vault</span> <span class="at">-</span> Secret Management</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="va">After</span><span class="op">=</span>network-online.target</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="va">Wants</span><span class="op">=</span>network-online.target</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="ex">[Service]</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="va">User</span><span class="op">=</span>vault</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="va">Group</span><span class="op">=</span>vault</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="va">ExecStart</span><span class="op">=</span>/usr/bin/vault <span class="ex">server</span> <span class="at">-config</span><span class="op">=</span>/etc/vault/vault.hcl</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="va">ExecReload</span><span class="op">=</span>/bin/kill <span class="ex">-HUP</span> <span class="va">$MAINPID</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="va">Restart</span><span class="op">=</span>on-failure</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="va">LimitNOFILE</span><span class="op">=</span>65536</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="ex">[Install]</span></span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="va">WantedBy</span><span class="op">=</span>multi-user.target</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>사용자변경 및 권한설정</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chown root:root /etc/systemd/system/vault.service</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> chmod 644 /etc/systemd/system/vault.service</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="복호화-검증" class="level2">
+<h2 class="anchored" data-anchor-id="복호화-검증">복호화 검증</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 복호화 결과가 원본과 동일한지 검증</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>all_equal <span class="ot">&lt;-</span> <span class="fu">all</span>(result_df<span class="sc">$</span>original_id <span class="sc">==</span> result_df<span class="sc">$</span>decrypted)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (all_equal) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log_success</span>(<span class="st">"복호화 결과가 원본과 완전히 일치합니다."</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log_error</span>(<span class="st">"복호화 결과와 원본이 일치하지 않는 값이 있습니다."</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(result_df[result_df<span class="sc">$</span>original_id <span class="sc">!=</span> result_df<span class="sc">$</span>decrypted, ])</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="기동" class="level4">
-<h4 class="anchored" data-anchor-id="기동">기동</h4>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl daemon-reload</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl enable vault</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="kw">```</span><span class="fu">bash</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl start vault </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl status vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</section>
-</section>
-<section id="최초설정" class="level3">
-<h3 class="anchored" data-anchor-id="최초설정">최초설정</h3>
-<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> vault operator init</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>HTTPS와 HTTP 불일치를 해결을 위한 인자로 주어서 초기설정 시작</p>
-<pre><code> sudo vault operator init -address="http://127.0.0.1:8200"</code></pre>
-<p>키와 토큰을 잘 저장한 후</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vault</span> operator unseal <span class="op">&lt;</span>UNSEAL_KEY<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Sealed: false로 바뀐 것을 확인한 후</p>
+<section id="파일-내용-읽어오기" class="level2">
+<h2 class="anchored" data-anchor-id="파일-내용-읽어오기">파일 내용 읽어오기</h2>
+<p>이 단계에서는 가명화된 파일명과 매칭되는 원본 파일의 내용을 읽어옵니다.<br>
+파일마다 인코딩이 다를 수 있으므로, 인코딩 자동 감지 및 변환을 함께 처리하는 것이 좋습니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"stringi"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">"stringi"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringi)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 파일 경로 벡터 생성</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>file_paths <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"data/raw"</span>, file_list)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 인코딩 감지 없이 UTF-8로 처리 (실패 시 깨질 수 있음)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>read_file_content <span class="ot">&lt;-</span> <span class="cf">function</span>(path) {</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  content <span class="ot">&lt;-</span> stringi<span class="sc">::</span><span class="fu">stri_read_lines</span>(path, <span class="at">encoding =</span> <span class="st">"UTF-8"</span>)  <span class="co"># 인코딩 고정</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(content, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>file_contents <span class="ot">&lt;-</span> <span class="fu">lapply</span>(file_paths, read_file_content)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 데이터프레임에 내용 추가</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>result_df<span class="sc">$</span>content <span class="ot">&lt;-</span> file_contents</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 일부 결과 확인</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result_df[, <span class="fu">c</span>(<span class="st">"original_id"</span>, <span class="st">"pseudonym"</span>, <span class="st">"content"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>하지만 위 코드에서 encoding을 “UTF-8”로 지정하면 stringi::stri_read_lines 함수에서 오류가 발생할 수 있으므로, 인코딩을 자동 감지하도록 아래와 같이 수정해야 합니다.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"stringi"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">"stringi"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringi)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 파일 경로 벡터 생성</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>file_paths <span class="ot">&lt;-</span> <span class="fu">file.path</span>(<span class="st">"data/raw"</span>, file_list)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 인코딩 감지 후 해당 인코딩으로 파일 읽기 및 로그 기록 (glue 문법 사용)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>read_file_content <span class="ot">&lt;-</span> <span class="cf">function</span>(path) {</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  raw_bytes <span class="ot">&lt;-</span> <span class="fu">readBin</span>(path, <span class="at">what =</span> <span class="st">"raw"</span>, <span class="at">n =</span> <span class="fu">file.info</span>(path)<span class="sc">$</span>size)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  detected <span class="ot">&lt;-</span> stringi<span class="sc">::</span><span class="fu">stri_enc_detect</span>(raw_bytes)[[<span class="dv">1</span>]]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  best <span class="ot">&lt;-</span> detected[<span class="dv">1</span>, ]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log_info</span>(<span class="st">"파일 [{path}]의 감지된 인코딩: {best$Encoding} (신뢰도: {round(best$Confidence, 2)})"</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  content <span class="ot">&lt;-</span> stringi<span class="sc">::</span><span class="fu">stri_read_lines</span>(path, <span class="at">encoding =</span> best<span class="sc">$</span>Encoding)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(content, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>file_contents <span class="ot">&lt;-</span> <span class="fu">lapply</span>(file_paths, read_file_content)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 데이터프레임에 내용 추가</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>result_df<span class="sc">$</span>content <span class="ot">&lt;-</span> file_contents</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 총 파일 개수 로그로 출력</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">log_success</span>(<span class="st">"총 {length(file_paths)}개의 파일을 성공적으로 읽었습니다."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>

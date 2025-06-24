@@ -1,16 +1,24 @@
 project:
   type: website
+  execute-dir: project  
   output-dir: docs
+  
 
 website:
-  title: "Pseudo_Struct"
+  title: "가명화 프로젝트"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - href: quarto/vault.qmd
-        text: 개인정보보호        
-      - about.qmd
+      - text: 블로그
+        href: index.qmd    
+      - text: 개발기록
+        href: posts/development/development.qmd
+        
+  sidebar:
+    - title: "개발기록"
+      contents:
+        - posts/development/development.qmd
+        - posts/development/secret-management.qmd
+        - posts/development/authentication.qmd
 
 format:
   html:
@@ -19,6 +27,7 @@ format:
       - brand
     css: styles.css
     toc: true
+    number-sections: true   # ← 모든 HTML 출력에 번호 매기기    
 
 editor: visual
 

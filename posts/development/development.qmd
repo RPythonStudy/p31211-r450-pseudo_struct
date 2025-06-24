@@ -1,0 +1,8 @@
+---
+title: "개발기록"
+description: "개발과정을 기록하여 나의 기억과 협업에 도움이 되고자 함"
+author: "BenKorea"
+date: "2025-06-18"
+date-modified: last-modified
+categories: [deveolpment]
+---

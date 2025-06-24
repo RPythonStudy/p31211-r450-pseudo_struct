@@ -6,11 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="BenKorea">
-<meta name="dcterms.date" content="2025-06-14">
-<meta name="description" content="R과 Python을 사용하는 프로젝트 용">
 
-<title>p3135-r450-template – Pseudo_Struct</title>
+<title>Blog – 가명화 프로젝트</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,40 +20,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -67,6 +30,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -103,7 +68,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -111,12 +134,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">Pseudo_Struct</span>
+    <span class="navbar-title">가명화 프로젝트</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -127,15 +150,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link active" href="./index.html" aria-current="page"> 
-<span class="menu-text">Home</span></a>
+<span class="menu-text">블로그</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./quarto/vault.html"> 
-<span class="menu-text">개인정보보호</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="./posts/development/development.html"> 
+<span class="menu-text">개발기록</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -145,70 +164,229 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page-left">
+      <h1 class="title">Blog</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta column-page-left">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    </div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div><div class="category" data-category="QXV0aGVudGljYXRpb24=">Authentication <span class="quarto-category-count">(1)</span></div><div class="category" data-category="S2V5Q2xvYWs=">KeyCloak <span class="quarto-category-count">(1)</span></div><div class="category" data-category="VmF1bHQ=">Vault <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGV2ZW9scG1lbnQ=">deveolpment <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">p3135-r450-template</h1>
-</div>
 
-<div>
-  <div class="description">
-    R과 Python을 사용하는 프로젝트 용
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
   </div>
-</div>
-
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>BenKorea </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">June 14, 2025</p>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
     </div>
-  </div>
-  
-    <div>
-    <div class="quarto-title-meta-heading">Modified</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 16, 2025</p>
-    </div>
-  </div>
-    
-  </div>
-  
-
-
-</header>
-
-
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"_setup.R"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>here() starts at /home/ben/projects/p3135-r450-pseudo_struct</code></pre>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>INFO [2025-06-16 09:47:10] 📄 사용자 정의 함수 로드 완료 (fs::dir_ls + source)</code></pre>
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="VmF1bHQ=" data-listing-date-sort="1750172400000" data-listing-file-modified-sort="1750731810338" data-listing-date-modified-sort="1750731810000" data-listing-reading-time-sort="3" data-listing-word-count-sort="485">
+<div class="thumbnail">
+<p><a href="./posts/development/secret-management.html" class="no-external"></a></p><a href="./posts/development/secret-management.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/development/secret-management.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/development/secret-management.html" class="no-external">민감정보관리시스템 구축</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/development/secret-management.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('VmF1bHQ='); return false;">
+Vault
 </div>
 </div>
-
-
-
-</main> <!-- /main -->
+<div class="listing-description">
+<a href="./posts/development/secret-management.html" class="no-external">개인정보보호 위해 HashiCorp Vault 구축</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/development/secret-management.html" class="no-external">
+<div class="listing-date">
+Jun 18, 2025
+</div>
+<div class="listing-author">
+BenKorea
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="QXV0aGVudGljYXRpb24lMkNLZXlDbG9haw==" data-listing-date-sort="1718982000000" data-listing-file-modified-sort="1750729144115" data-listing-date-modified-sort="1750729144000" data-listing-reading-time-sort="3" data-listing-word-count-sort="494">
+<div class="thumbnail">
+<p><a href="./posts/development/authentication.html" class="no-external"></a></p><a href="./posts/development/authentication.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/development/authentication.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/development/authentication.html" class="no-external">인증시스템 구축</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/development/authentication.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('QXV0aGVudGljYXRpb24='); return false;">
+Authentication
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('S2V5Q2xvYWs='); return false;">
+KeyCloak
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/development/authentication.html" class="no-external">게인정보보호 위해 KeyCloak 구축</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/development/authentication.html" class="no-external">
+<div class="listing-date">
+Jun 22, 2024
+</div>
+<div class="listing-author">
+BenKorea feat Copilot
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="ZGV2ZW9scG1lbnQ=" data-listing-date-sort="1750172400000" data-listing-file-modified-sort="1750728621673" data-listing-date-modified-sort="1750728621000" data-listing-reading-time-sort="1" data-listing-word-count-sort="1">
+<div class="thumbnail">
+<p><a href="./posts/development/development.html" class="no-external"></a></p><a href="./posts/development/development.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/development/development.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/development/development.html" class="no-external">개발기록</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/development/development.html" class="no-external"></a>
+</div>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('ZGV2ZW9scG1lbnQ='); return false;">
+deveolpment
+</div>
+</div>
+<div class="listing-description">
+<a href="./posts/development/development.html" class="no-external">개발과정을 기록하여 나의 기억과 협업에 도움이 되고자 함</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/development/development.html" class="no-external">
+<div class="listing-date">
+Jun 18, 2025
+</div>
+<div class="listing-author">
+BenKorea
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1750345200000" data-listing-file-modified-sort="1750411426524" data-listing-date-modified-sort="1750411426000" data-listing-reading-time-sort="3" data-listing-word-count-sort="438">
+<div class="thumbnail">
+<p><a href="./posts/pseudonymize_files.html" class="no-external"></a></p><a href="./posts/pseudonymize_files.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/pseudonymize_files.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/pseudonymize_files.html" class="no-external">가명화</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/pseudonymize_files.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/pseudonymize_files.html" class="no-external">R에서도 로그레벨에 따른 출력설정이 가능하므로 이 프로젝트에서 logger chunk에서 이를 구현하였습니다. 이를 위해서는 미리 .Rprofile에 코딩하는 등의 사전준비가 필요하므로 지금은 단순히 - log_debug() - log_info() - log_warn() - log_error() 중에 하나를…</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/pseudonymize_files.html" class="no-external">
+<div class="listing-date">
+Jun 20, 2025
+</div>
+<div class="listing-author">
+BenKorea feat Copilot
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1750172400000" data-listing-file-modified-sort="1750218437615" data-listing-date-modified-sort="1750218437000" data-listing-reading-time-sort="1" data-listing-word-count-sort="75">
+<div class="thumbnail">
+<p><a href="./posts/python.html" class="no-external"></a></p><a href="./posts/python.html" class="no-external">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+</a><p><a href="./posts/python.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/python.html" class="no-external">python 프로젝트 설정</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/python.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/python.html" class="no-external">sys.path에 기록됩니다. 0: 현재 디렉토리 1: 표준 라이브러리 압축 2: 표준 라이브러입 3: 확장 라이브러리 4: pip</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/python.html" class="no-external">
+<div class="listing-date">
+Jun 18, 2025
+</div>
+<div class="listing-author">
+BenKorea
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

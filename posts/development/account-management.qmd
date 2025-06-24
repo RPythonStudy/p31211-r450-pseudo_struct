@@ -1,0 +1,24 @@
+---
+title: "계정관리시스템 구축"
+description: "개인정보보호를 위한 OpenLDAP 시스템 구축"
+author: "BenKorea"
+date: "2024-06-24"
+date-modified: last-modified
+categories: [openLDAP]
+---
+
+## 계정관리시스템 선택
+- openLDAP
+- 병원과의 연계가 불투명하므로 지금은 도커로 구현
+
+## 도커로 설치
+
+```{r openldap-mkdir, eval=FALSE, filename="bash"}
+sudo mkdir openldap
+cd openldap
+sudo mkdir ldap-data
+sudo mkdir ldap-config
+```
+
+
+
