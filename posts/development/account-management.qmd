@@ -8,8 +8,60 @@ categories: [openLDAP]
 ---
 
 ## 계정관리시스템 선택
-- openLDAP
-- 병원과의 연계가 불투명하므로 지금은 도커로 구현
+
+-   openLDAP
+-   병원과의 연계가 불투명하므로 지금은 도커로 구현
+
+## 자가서명 인증서
+
+-   openLDAP 서버와의 통신은 HTTPS/TLS 암호화를 적용하여 안전하게 보호해야 합니다.
+-   openssl로 인증서와 키를 발급하기 전에, 해당 파일들을 저장할 디렉터리를 생성
+-   보안을 위해 소유주와 그룹을 root로 제한하고 root만 rwx 되도록 700으로 권한제한
+
+```{r openssl-mkdir, eval=FALSE, filename="bash"}
+sudo mkdir -p /etc/shared-certs
+sudo chown root:root  /etc/shared-certs
+sudo chmod 700        /etc/shared-certs
+```
+
+-   검증은
+
+```{r openssl-mkdir-validation, eval=FALSE, filename="bash"}
+ls -ld /etc/shared-certs
+```
+
+-   openssl를 sudo 권한으로 실행하여 인증서와 키를 발급합니다.
+
+```{r openssl-req, eval=FALSE, filename="bash"}
+sudo openssl req \
+  -x509 \
+  -newkey rsa:2048 \
+  -keyout /etc/shared-certs/server.key \
+  -out /etc/shared-certs/server.crt \
+  -days 365 \
+  -nodes \
+  -subj "/C=KR/ST=Seoul/L=Seoul/O=KIRAMS/OU=RPythonStudy/CN=localhost" \
+  -addext "subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server, DNS:openldap-server"
+```
+
+-   아래의 실행명령으로 파일이 존재하는지 검증하고
+
+```{r openssl-req-validation, eval=FALSE, filename="bash"}
+sudo ls -l /etc/shared-certs
+```
+
+-   아래의 실행명령으로 crt 파일의 일부 내용을 조회해 봅니다.
+
+```{r openssl-subject-SAN-validation, eval=FALSE, filename="bash"}
+sudo openssl x509 -in /etc/shared-certs/server.crt -noout -text | grep -E 'Subject:|DNS:|IP Address'
+```
+
+-   생성 후 파일 권한이 600이나 644가 아니라면 이를 각각 설정합니다.
+
+```{r server-cert, eval=FALSE, filename="bash"}
+sudo chmod 600 /etc/shared-certs/server.key
+sudo chmod 644 /etc/shared-certs/server.crt
+```
 
 ## 도커로 설치
 
@@ -20,5 +72,23 @@ sudo mkdir ldap-data
 sudo mkdir ldap-config
 ```
 
-
-
+```{r openldap-compose, eval=FALSE, filename="docker-compose.yml"}
+services:
+  openldap:
+    image: osixia/openldap:1.5.0
+    environment:
+      - LDAP_ORGANISATION=MyCompany
+      - LDAP_DOMAIN=mycompany.com
+      - LDAP_ADMIN_PASSWORD=adminpassword
+      - LDAP_TLS_CRT_FILENAME=ldap.crt
+      - LDAP_TLS_KEY_FILENAME=ldap.key
+      - LDAP_TLS_CA_CRT_FILENAME=ca.crt
+      - LDAP_TLS=true
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ./ldap-data:/var/lib/ldap
+      - ./ldap-config:/etc/ldap/slapd.d
+      - /etc/nmdose/certs:/container/service/slapd/assets/certs
+```

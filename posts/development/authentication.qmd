@@ -1,7 +1,7 @@
 ---
 title: "인증시스템 구축"
 description: "게인정보보호 위해 KeyCloak 구축"
-author: "BenKorea feat Copilot"
+author: "BenKorea"
 date: "2024-06-22"
 date-modified: last-modified
 categories: [Authentication, KeyCloak]
@@ -30,12 +30,12 @@ categories: [Authentication, KeyCloak]
 openssl req \
   -x509 \
   -newkey rsa:2048 \
-  -keyout mykey.key \
-  -out mycert.crt \
+  -keyout /etc/shared-certs/server.key \
+  -out /etc/shared-certs/server.crt \
   -days 365 \
   -nodes \
-  -subj "/C=KR/ST=Seoul/L=Seoul/O=KCCH/OU=RPythonStudy/CN=localhost" \
-  -addext "subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server"
+  -subj "/C=KR/ST=Seoul/L=Seoul/O=KIRAMS/OU=RPythonStudy/CN=localhost" \
+  -addext "subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server, DNS:openldap-server"
 ```
 
 업계표준에 따른 저장폴더는

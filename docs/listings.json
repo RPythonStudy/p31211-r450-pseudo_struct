@@ -3,6 +3,7 @@
     "listing": "/index.html",
     "items": [
       "/posts/development/secret-management.html",
+      "/posts/development/account-management.html",
       "/posts/development/authentication.html",
       "/posts/development/development.html",
       "/posts/pseudonymize_files.html",
