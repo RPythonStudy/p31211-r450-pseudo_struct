@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -132,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">블로그</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../../posts/development/development.html" aria-current="page"> 
+    <a class="nav-link" href="../../posts/development/development.qmd"> 
 <span class="menu-text">개발기록</span></a>
   </li>  
 </ul>
@@ -141,45 +141,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/development/secret-management.html">민감정보관리시스템 구축</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/development/development.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">개발기록</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/development/secret-management.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">민감정보관리시스템 구축</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/development/authentication.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">인증시스템 구축</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -191,6 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#디렉토리" id="toc-디렉토리" class="nav-link" data-scroll-target="#디렉토리"><span class="header-section-number">1.1</span> 디렉토리</a></li>
   <li><a href="#회용-인증서만들기" id="toc-회용-인증서만들기" class="nav-link" data-scroll-target="#회용-인증서만들기"><span class="header-section-number">1.2</span> 1회용 인증서만들기</a></li>
   <li><a href="#docker-compose.yml-작성" id="toc-docker-compose.yml-작성" class="nav-link" data-scroll-target="#docker-compose.yml-작성"><span class="header-section-number">1.3</span> docker-compose.yml 작성</a></li>
+  <li><a href="#api를-이용한-컨테이너-vault-초기화" id="toc-api를-이용한-컨테이너-vault-초기화" class="nav-link" data-scroll-target="#api를-이용한-컨테이너-vault-초기화"><span class="header-section-number">1.4</span> api를 이용한 컨테이너 vault 초기화</a></li>
   </ul></li>
   <li><a href="#vault-정책계정목적-매트릭스-예시" id="toc-vault-정책계정목적-매트릭스-예시" class="nav-link" data-scroll-target="#vault-정책계정목적-매트릭스-예시"><span class="header-section-number">2</span> Vault 정책/계정/목적 매트릭스 예시</a></li>
   </ul>
@@ -233,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 26, 2025</p>
+      <p class="date-modified">June 27, 2025</p>
     </div>
   </div>
     
@@ -365,15 +331,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>          <span class="st">"max_lease_ttl"</span><span class="sc">:</span> <span class="st">"720h"</span>,</span>
 <span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">"ui"</span><span class="sc">:</span> true</span>
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    ports<span class="sc">:</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="st">"8200:8200"</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    volumes<span class="sc">:</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> .<span class="sc">/</span>file<span class="sc">:</span><span class="er">/</span>vault<span class="sc">/</span>file</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> .<span class="sc">/</span>certs<span class="sc">:</span><span class="er">/</span>vault<span class="sc">/</span>certs      </span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    restart<span class="sc">:</span> unless<span class="sc">-</span>stopped</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    command<span class="sc">:</span> server</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>      VAULT_API_ADDR<span class="sc">:</span> <span class="st">"https://vault:8200"</span>   <span class="co"># &lt;--- 이 줄만 추가</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    ports<span class="sc">:</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="st">"8200:8200"</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    volumes<span class="sc">:</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> .<span class="sc">/</span>file<span class="sc">:</span><span class="er">/</span>vault<span class="sc">/</span>file</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> .<span class="sc">/</span>certs<span class="sc">:</span><span class="er">/</span>vault<span class="sc">/</span>certs      </span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    restart<span class="sc">:</span> unless<span class="sc">-</span>stopped</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>    command<span class="sc">:</span> server</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
+<ul>
+<li>검증</li>
+</ul>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>docker exec <span class="sc">-</span>it vault env <span class="sc">|</span> grep VAULT_API_ADDR</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="api를-이용한-컨테이너-vault-초기화" class="level3" data-number="1.4">
+<h3 data-number="1.4" class="anchored" data-anchor-id="api를-이용한-컨테이너-vault-초기화"><span class="header-section-number">1.4</span> api를 이용한 컨테이너 vault 초기화</h3>
 </section>
 </section>
 <section id="vault-정책계정목적-매트릭스-예시" class="level2" data-number="2">
@@ -383,9 +364,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 50%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 47%">
 </colgroup>
 <thead>
 <tr class="header">

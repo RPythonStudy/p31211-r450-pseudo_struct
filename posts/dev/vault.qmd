@@ -7,81 +7,28 @@ date-modified: last-modified
 categories: [Vault]
 ---
 
-## 민감정보관리시스템 선택
+## Vault Docker Deployment
 
--   HashCorp Vault 무료 오픈소스로 진행
+### 디렉토리
 
-## vault 설치
-
--   도커 컨테이너로 진행
-
-### 디렉토리 생성
-```
-sudo rm -rf vault
- ```
-
-
--   마운트에 필요한 디렉토리를 만들고 권한을 vault 컨테이너에게 부여
+-   마운트에 필요한 디렉토리를 만들고
 
 ```{r vault-mkdir, eval=FALSE, filename="bash"}
 sudo mkdir -p ~/projects/vault
 ```
 
+-   적절한 권한을 부여
+
 ```{r vault-mkdir-sub, eval=FALSE, filename="bash"}
 sudo mkdir -p ~/projects/vault/config ~/projects/vault/file ~/projects/vault/certs ~/projects/vault/logs
 sudo chown 100:100 ~/projects/vault/config ~/projects/vault/file ~/projects/vault/certs ~/projects/vault/logs
 sudo chmod 700 ~/projects/vault/config ~/projects/vault/file ~/projects/vault/certs ~/projects/vault/logs
-
 ```
 
 -   검증
 
 ```{r vault-mkdir-validation, eval=FALSE, filename="bash"}
 sudo ls -ld ~/projects/vault ~/projects/vault/config ~/projects/vault/certs ~/projects/vault/file ~/projects/vault/logs
-```
-
-### config.hcl 작성
-- 지금까지는 모두 실패했기 때문에 일단 컨테이너 옵션으로 구현하면서 bypass
-
-```
-sudo nano projects/vault/config/config.hcl
-```
-
-```{r, config-hcl, eval=FALSE, filename='config.hcl'}
-## Vault 운영모드 기본 config.hcl 예시
-
-# 1. HTTP(S) Listener 설정 (운영환경: 반드시 TLS 활성화)
-listener "tcp" {
-  address       = "0.0.0.0:8200"               # 모든 네트워크에서 수신
-  tls_cert_file = "/vault/certs/vault.crt"       # 볼륨 마운트된 인증서
-  tls_key_file  = "/vault/certs/vault.key"       # 볼륨 마운트된 키
-  # tls_min_version = "tls12"                  # 필요시 최소 TLS 버전 강제
-}
-
-# 2. 스토리지 백엔드 설정 (단일 서버: file, 클러스터: raft 등)
-storage "file" {
-  path = "/vault/file"
-}
-# storage "raft" {
-#   path    = "/vault/raft"
-#   node_id = "vault-1"
-# }
-# (필요시 클러스터, Consul, DynamoDB 등도 지원)
-
-# 3. UI 활성화
-ui = true
-
-# 4. API 접근제어 (예시)
-# api_addr = "https://vault.myorg.com:8200"
-# cluster_addr = "https://vault.myorg.com:8201"
-
-# 5. 로그 등 고급 옵션 예시
-# log_level = "info"
-
-# 6. (옵션) Audit log
-# audit {
-#   file_path = "/vault/logs/audit.log"
-# }
 ```
 
 ### 1회용 인증서만들기
@@ -98,7 +45,9 @@ sudo openssl req \
   -addext "subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server, DNS:openldap-server"
 ```
 
-```
+-   컨테이너 내 vault가 사용할 수 있도록 권한설정
+
+```{r chown-dir, eval=FALSE, filename="bash"}
 sudo chown 100:100 ./projects/vault/certs/vault.key
 ```
 
@@ -114,11 +63,11 @@ sudo openssl x509 -in projects/vault/certs/vault.crt -noout -text | grep -E 'Sub
 
 ### docker-compose.yml 작성
 
-```
+```{r nano-yml, eval=FALSE, filename="bash"}
 sudo nano projects/vault/docker-compose.yml
 ```
 
-```
+```{r docker-compose, eval=FALSE, filename="docker-compose.yml"}
 services:
   vault:
     image: hashicorp/vault:latest
@@ -136,6 +85,7 @@ services:
           "max_lease_ttl": "720h",
           "ui": true
         }
+      VAULT_API_ADDR: "https://vault:8200"   # <--- 이 줄만 추가
     ports:
       - "8200:8200"
     volumes:
@@ -145,16 +95,20 @@ services:
     command: server
 ```
 
+-   검증
 
+```{r api-addr-validation, eval=FALSE, filename="bash"}
+docker exec -it vault env | grep VAULT_API_ADDR
+```
 
-
+### api를 이용한 컨테이너 vault 초기화
 
 ## Vault 정책/계정/목적 매트릭스 예시
 
 -   vault
 
 | 정책명(policy) | 계정명(entity/role) | 목적/설명 |
-|------------------|------------------|-------------------------------------|
+|-------------------|-------------------|----------------------------------|
 | svc-nmdose-prod-policy | svc-nmdose-prod | nmdose 운영서비스가 운영 비밀/인증서를 읽기 위해 사용 |
 | svc-pseudo_struct-prod-policy | svc-pseudo_struct-prod | pseudo_struct 운영서비스가 운영 비밀/인증서를 읽기 위해 사용 |
 | svc-openldap-prod-policy | svc-openldap-prod | OpenLDAP 운영서비스의 비밀/인증서 접근 |

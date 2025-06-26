@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="BenKorea">
-<meta name="dcterms.date" content="2025-06-18">
-<meta name="description" content="개인정보보호 위해 HashiCorp Vault 구축">
+<meta name="dcterms.date" content="2024-06-22">
+<meta name="description" content="게인정보보호 위해 KeyCloak 구축">
 
-<title>민감정보관리시스템 구축 – 가명화 프로젝트</title>
+<title>인증시스템 구축 – 가명화 프로젝트</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -132,7 +132,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">블로그</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../../posts/development/development.html" aria-current="page"> 
+    <a class="nav-link" href="../../posts/development/development.qmd"> 
 <span class="menu-text">개발기록</span></a>
   </li>  
 </ul>
@@ -141,58 +141,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../posts/development/secret-management.html">민감정보관리시스템 구축</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/development/development.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">개발기록</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/development/secret-management.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">민감정보관리시스템 구축</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../posts/development/authentication.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">인증시스템 구축</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#vault-docker-deployment" id="toc-vault-docker-deployment" class="nav-link active" data-scroll-target="#vault-docker-deployment"><span class="header-section-number">1</span> Vault Docker Deployment</a>
-  <ul class="collapse">
-  <li><a href="#디렉토리" id="toc-디렉토리" class="nav-link" data-scroll-target="#디렉토리"><span class="header-section-number">1.1</span> 디렉토리</a></li>
-  <li><a href="#회용-인증서만들기" id="toc-회용-인증서만들기" class="nav-link" data-scroll-target="#회용-인증서만들기"><span class="header-section-number">1.2</span> 1회용 인증서만들기</a></li>
-  <li><a href="#docker-compose.yml-작성" id="toc-docker-compose.yml-작성" class="nav-link" data-scroll-target="#docker-compose.yml-작성"><span class="header-section-number">1.3</span> docker-compose.yml 작성</a></li>
-  </ul></li>
-  <li><a href="#vault-정책계정목적-매트릭스-예시" id="toc-vault-정책계정목적-매트릭스-예시" class="nav-link" data-scroll-target="#vault-정책계정목적-매트릭스-예시"><span class="header-section-number">2</span> Vault 정책/계정/목적 매트릭스 예시</a></li>
+  <li><a href="#인증-시스템-선택" id="toc-인증-시스템-선택" class="nav-link active" data-scroll-target="#인증-시스템-선택"><span class="header-section-number">0.1</span> 인증 시스템 선택</a></li>
+  <li><a href="#사용자-역할-정의" id="toc-사용자-역할-정의" class="nav-link" data-scroll-target="#사용자-역할-정의"><span class="header-section-number">0.2</span> 사용자 역할 정의</a></li>
+  <li><a href="#keycloak-설치" id="toc-keycloak-설치" class="nav-link" data-scroll-target="#keycloak-설치"><span class="header-section-number">0.3</span> keycloak 설치</a></li>
   </ul>
 </nav>
     </div>
@@ -201,15 +162,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">민감정보관리시스템 구축</h1>
+<h1 class="title">인증시스템 구축</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Vault</div>
+    <div class="quarto-category">Authentication</div>
+    <div class="quarto-category">KeyCloak</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    개인정보보호 위해 HashiCorp Vault 구축
+    게인정보보호 위해 KeyCloak 구축
   </div>
 </div>
 
@@ -226,14 +188,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">June 18, 2025</p>
+      <p class="date">June 22, 2024</p>
     </div>
   </div>
   
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">June 26, 2025</p>
+      <p class="date-modified">June 25, 2025</p>
     </div>
   </div>
     
@@ -244,84 +206,59 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="vault-docker-deployment" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="vault-docker-deployment"><span class="header-section-number">1</span> Vault Docker Deployment</h2>
-<section id="디렉토리" class="level3" data-number="1.1">
-<h3 data-number="1.1" class="anchored" data-anchor-id="디렉토리"><span class="header-section-number">1.1</span> 디렉토리</h3>
+<section id="인증-시스템-선택" class="level3" data-number="0.1">
+<h3 data-number="0.1" class="anchored" data-anchor-id="인증-시스템-선택"><span class="header-section-number">0.1</span> 인증 시스템 선택</h3>
 <ul>
-<li>마운트에 필요한 디렉토리를 만들고</li>
+<li>개인정보보호법 준수를 위해 사용자별 권한 관리 필요</li>
+<li>오픈소스 Keycloak 도입 결정</li>
 </ul>
-<div class="cell">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sudo mkdir <span class="sc">-</span>p <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<ul>
-<li>적절한 권한을 부여</li>
-</ul>
-<div class="cell">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sudo mkdir <span class="sc">-</span>p <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>config <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>file <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>certs <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>logs</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sudo chown <span class="dv">100</span><span class="sc">:</span><span class="dv">100</span> <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>config <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>file <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>certs <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>logs</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sudo chmod <span class="dv">700</span> <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>config <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>file <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>certs <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>logs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<ul>
-<li>검증</li>
-</ul>
-<div class="cell">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sudo ls <span class="sc">-</span>ld <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>config <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>certs <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>file <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>logs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
 </section>
-<section id="회용-인증서만들기" class="level3" data-number="1.2">
-<h3 data-number="1.2" class="anchored" data-anchor-id="회용-인증서만들기"><span class="header-section-number">1.2</span> 1회용 인증서만들기</h3>
-<div class="cell">
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>bash</strong></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sudo openssl req \</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>x509 \</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>newkey rsa<span class="sc">:</span><span class="dv">2048</span> \</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>keyout projects<span class="sc">/</span>vault<span class="sc">/</span>certs<span class="sc">/</span>vault.key \</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>out projects<span class="sc">/</span>vault<span class="sc">/</span>certs<span class="sc">/</span>vault.crt \</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>days <span class="dv">14</span> \</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>nodes \</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>subj <span class="st">"/C=KR/ST=Seoul/L=Seoul/O=KIRAMS/OU=RPythonStudy/CN=localhost"</span> \</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>addext <span class="st">"subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server, DNS:openldap-server"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
+<section id="사용자-역할-정의" class="level3" data-number="0.2">
+<h3 data-number="0.2" class="anchored" data-anchor-id="사용자-역할-정의"><span class="header-section-number">0.2</span> 사용자 역할 정의</h3>
 <ul>
-<li>컨테이너 내 vault가 사용할 수 있도록 권한설정</li>
+<li>관리자(nmdose-superuser):
+<ul>
+<li>시스템 설정, 사용자 관리, 감사 기록 조회 등 모든 권한 보유</li>
+</ul></li>
+<li>일반 사용자(nmdose-user):
+<ul>
+<li>선량 정보 조회 등 제한된 기능만 접근 가능</li>
+</ul></li>
+</ul>
+</section>
+<section id="keycloak-설치" class="level3" data-number="0.3">
+<h3 data-number="0.3" class="anchored" data-anchor-id="keycloak-설치"><span class="header-section-number">0.3</span> keycloak 설치</h3>
+<ul>
+<li>인증 서버는 nmdose 시스템과 분리된 서버에 설치하는 것이 이상적이나, 개발 단계에서는 Docker를 활용해 분리된 서버를 모사함</li>
+<li>운영(Production) 환경에서는 별도의 데이터베이스 지정 및 HTTPS(TLS) 인증서 적용 필요</li>
+<li>병원 내부망(도메인 없는 사설망)에서는 공인 인증서가 아닌 “자가서명 인증서” 또는 “사내 CA 인증서”를 사용 필요하므로
+<ul>
+<li>ubuntu에 제공되는 openssl로 자가서명 인증서를 발급</li>
+</ul></li>
 </ul>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>sudo chown <span class="dv">100</span><span class="sc">:</span><span class="dv">100</span> .<span class="sc">/</span>projects<span class="sc">/</span>vault<span class="sc">/</span>certs<span class="sc">/</span>vault.key</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>openssl req \</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>x509 \</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>newkey rsa<span class="sc">:</span><span class="dv">2048</span> \</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>keyout <span class="sc">/</span>etc<span class="sc">/</span>shared<span class="sc">-</span>certs<span class="sc">/</span>server.key \</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>out <span class="sc">/</span>etc<span class="sc">/</span>shared<span class="sc">-</span>certs<span class="sc">/</span>server.crt \</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>days <span class="dv">365</span> \</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>nodes \</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>subj <span class="st">"/C=KR/ST=Seoul/L=Seoul/O=KIRAMS/OU=RPythonStudy/CN=localhost"</span> \</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">-</span>addext <span class="st">"subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server, DNS:openldap-server"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<ul>
-<li>검증</li>
-</ul>
+<p>업계표준에 따른 저장폴더는</p>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sudo ls <span class="sc">-</span>l projects<span class="sc">/</span>vault<span class="sc">/</span>certs</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sudo mkdir <span class="sc">-</span>p <span class="sc">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="cell">
@@ -329,214 +266,98 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sudo openssl x509 <span class="sc">-</span><span class="cf">in</span> projects<span class="sc">/</span>vault<span class="sc">/</span>certs<span class="sc">/</span>vault.crt <span class="sc">-</span>noout <span class="sc">-</span>text <span class="sc">|</span> grep <span class="sc">-</span>E <span class="st">'Subject:|DNS:|IP Address'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>sudo cp <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>keycloak<span class="sc">-</span>server<span class="sc">/</span>mycert.crt <span class="sc">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span>server.crt</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>sudo cp <span class="sc">~</span><span class="er">/</span>projects<span class="sc">/</span>keycloak<span class="sc">-</span>server<span class="sc">/</span>mykey.key <span class="sc">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span>server.key</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-</section>
-<section id="docker-compose.yml-작성" class="level3" data-number="1.3">
-<h3 data-number="1.3" class="anchored" data-anchor-id="docker-compose.yml-작성"><span class="header-section-number">1.3</span> docker-compose.yml 작성</h3>
+<p>파일의 권한에 대해서도 항상 신경써야 한다.</p>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
 <pre><strong>bash</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sudo nano projects<span class="sc">/</span>vault<span class="sc">/</span>docker<span class="sc">-</span>compose.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sudo chmod <span class="dv">644</span> <span class="sc">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span>server.key</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sudo chmod <span class="dv">644</span> <span class="sc">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span>server.crt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>그러나 chmod 644는 보안정책에 위반되므로 vault로 동적으로 주입하는 것으로 전환해야 함.</p>
+<p>아래는 chmod 644에서 성공하기는 했음. 그러나 vault로 수정이 필요함.</p>
+<p>매뉴얼에 따르면 keycloak production mode는 3가지 설정이 필요하다. - HTTPS - hostname - TLS</p>
+<p>커맨드라인에서 bin/kc.[sh|bat] start –https-certificate-file=/path/to/certfile.pem –https-certificate-key-file=/path/to/keyfile.pem 명령으로 HTTPS/TLS에 필요한 certificate 파일과 key 파일의 경로를 전달한다.</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>projects/keycloak-server/docker-compose.yml</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>version<span class="sc">:</span> <span class="st">"3.8"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>services<span class="sc">:</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  postgres<span class="sc">:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    image<span class="sc">:</span> postgres<span class="sc">:</span><span class="dv">16</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    container_name<span class="sc">:</span> nmdose<span class="sc">-</span>postgres</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    restart<span class="sc">:</span> always</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    environment<span class="sc">:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>      POSTGRES_DB<span class="sc">:</span> keycloak</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>      POSTGRES_USER<span class="sc">:</span> keycloak</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      POSTGRES_PASSWORD<span class="sc">:</span> keycloakpass</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    volumes<span class="sc">:</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> postgres_data<span class="sc">:</span><span class="er">/</span>var<span class="sc">/</span>lib<span class="sc">/</span>postgresql<span class="sc">/</span>data</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    networks<span class="sc">:</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> nmdose<span class="sc">-</span>net</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  keycloak<span class="sc">:</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    image<span class="sc">:</span> quay.io<span class="sc">/</span>keycloak<span class="sc">/</span>keycloak<span class="sc">:</span><span class="dv">25</span>.<span class="fl">0.0</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    container_name<span class="sc">:</span> nmdose<span class="sc">-</span>keycloak</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    command<span class="sc">:</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> start</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>https<span class="sc">-</span>certificate<span class="sc">-</span>file<span class="ot">=</span><span class="er">/</span>etc<span class="sc">/</span>x509<span class="sc">/</span>https<span class="sc">/</span>tls.crt</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>https<span class="sc">-</span>certificate<span class="sc">-</span>key<span class="sc">-</span>file<span class="ot">=</span><span class="er">/</span>etc<span class="sc">/</span>x509<span class="sc">/</span>https<span class="sc">/</span>tls.key</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>db<span class="ot">=</span>postgres</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>db<span class="sc">-</span>url<span class="sc">-</span>host<span class="ot">=</span>postgres</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>db<span class="sc">-</span>username<span class="ot">=</span>keycloak</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>db<span class="sc">-</span>password<span class="ot">=</span>keycloakpass</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>db<span class="sc">-</span>database<span class="ot">=</span>keycloak</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="sc">--</span>hostname<span class="ot">=</span>localhost</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    environment<span class="sc">:</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>      KC_HEALTH_ENABLED<span class="sc">:</span> <span class="st">"true"</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>      KC_METRICS_ENABLED<span class="sc">:</span> <span class="st">"true"</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>      KEYCLOAK_ADMIN<span class="sc">:</span> admin</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>      KEYCLOAK_ADMIN_PASSWORD<span class="sc">:</span> adminpass</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    volumes<span class="sc">:</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>      <span class="co"># 인증서 마운트: 호스트 → 컨테이너</span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="er">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span>server.crt<span class="sc">:</span><span class="er">/</span>etc<span class="sc">/</span>x509<span class="sc">/</span>https<span class="sc">/</span>tls.crt<span class="sc">:</span>ro</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="er">/</span>etc<span class="sc">/</span>nmdose<span class="sc">/</span>certs<span class="sc">/</span>server.key<span class="sc">:</span><span class="er">/</span>etc<span class="sc">/</span>x509<span class="sc">/</span>https<span class="sc">/</span>tls.key<span class="sc">:</span>ro</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>    depends_on<span class="sc">:</span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> postgres</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>    ports<span class="sc">:</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="st">"8443:8443"</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>    networks<span class="sc">:</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> nmdose<span class="sc">-</span>net</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>volumes<span class="sc">:</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  postgres_data<span class="sc">:</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>networks<span class="sc">:</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  nmdose<span class="sc">-</span>net<span class="sc">:</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>    driver<span class="sc">:</span> bridge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
-<pre><strong>docker-compose.yml</strong></pre>
+<pre><strong>bash</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>services<span class="sc">:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  vault<span class="sc">:</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    image<span class="sc">:</span> hashicorp<span class="sc">/</span>vault<span class="sc">:</span>latest</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    container_name<span class="sc">:</span> vault</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    cap_add<span class="sc">:</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> IPC_LOCK</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    environment<span class="sc">:</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      VAULT_LOCAL_CONFIG<span class="sc">:</span> <span class="er">|</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        {</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>          <span class="st">"storage"</span><span class="sc">:</span> {<span class="st">"file"</span><span class="sc">:</span> {<span class="st">"path"</span><span class="sc">:</span> <span class="st">"/vault/file"</span>}},</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>          <span class="st">"listener"</span><span class="sc">:</span> [</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            {<span class="st">"tcp"</span><span class="sc">:</span> { <span class="st">"address"</span><span class="sc">:</span> <span class="st">"0.0.0.0:8200"</span>, <span class="st">"tls_cert_file"</span><span class="sc">:</span> <span class="st">"/vault/certs/vault.crt"</span>, <span class="st">"tls_key_file"</span><span class="sc">:</span> <span class="st">"/vault/certs/vault.key"</span>}}</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>          ],</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>          <span class="st">"default_lease_ttl"</span><span class="sc">:</span> <span class="st">"168h"</span>,</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>          <span class="st">"max_lease_ttl"</span><span class="sc">:</span> <span class="st">"720h"</span>,</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>          <span class="st">"ui"</span><span class="sc">:</span> true</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    ports<span class="sc">:</span></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> <span class="st">"8200:8200"</span></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>    volumes<span class="sc">:</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> .<span class="sc">/</span>file<span class="sc">:</span><span class="er">/</span>vault<span class="sc">/</span>file</span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>      <span class="sc">-</span> .<span class="sc">/</span>certs<span class="sc">:</span><span class="er">/</span>vault<span class="sc">/</span>certs      </span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    restart<span class="sc">:</span> unless<span class="sc">-</span>stopped</span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    command<span class="sc">:</span> server</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sudo docker compose up <span class="sc">-</span>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-</section>
-</section>
-<section id="vault-정책계정목적-매트릭스-예시" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="vault-정책계정목적-매트릭스-예시"><span class="header-section-number">2</span> Vault 정책/계정/목적 매트릭스 예시</h2>
-<ul>
-<li>vault</li>
-</ul>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 50%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>정책명(policy)</th>
-<th>계정명(entity/role)</th>
-<th>목적/설명</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>svc-nmdose-prod-policy</td>
-<td>svc-nmdose-prod</td>
-<td>nmdose 운영서비스가 운영 비밀/인증서를 읽기 위해 사용</td>
-</tr>
-<tr class="even">
-<td>svc-pseudo_struct-prod-policy</td>
-<td>svc-pseudo_struct-prod</td>
-<td>pseudo_struct 운영서비스가 운영 비밀/인증서를 읽기 위해 사용</td>
-</tr>
-<tr class="odd">
-<td>svc-openldap-prod-policy</td>
-<td>svc-openldap-prod</td>
-<td>OpenLDAP 운영서비스의 비밀/인증서 접근</td>
-</tr>
-<tr class="even">
-<td>svc-keycloak-prod-policy</td>
-<td>svc-keycloak-prod</td>
-<td>Keycloak 운영서비스의 비밀/인증서 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-db-prod-policy</td>
-<td>svc-db-prod</td>
-<td>DB 접속 정보 등 운영환경 비밀 접근</td>
-</tr>
-<tr class="even">
-<td>svc-kibana-prod-policy</td>
-<td>svc-kibana-prod</td>
-<td>Kibana(감사 시스템) 운영환경 비밀 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-dashboard-prod-policy</td>
-<td>svc-dashboard-prod</td>
-<td>대시보드/통계 운영환경 비밀 접근</td>
-</tr>
-<tr class="even">
-<td>svc-nmdose-dev-policy</td>
-<td>svc-nmdose-dev</td>
-<td>nmdose 개발환경 비밀/인증서 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-pseudo_struct-dev-policy</td>
-<td>svc-pseudo_struct-dev</td>
-<td>pseudo_struct 개발환경 비밀/인증서 접근</td>
-</tr>
-<tr class="even">
-<td>svc-openldap-dev-policy</td>
-<td>svc-openldap-dev</td>
-<td>OpenLDAP 개발환경 비밀/인증서 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-keycloak-dev-policy</td>
-<td>svc-keycloak-dev</td>
-<td>Keycloak 개발환경 비밀/인증서 접근</td>
-</tr>
-<tr class="even">
-<td>svc-db-dev-policy</td>
-<td>svc-db-dev</td>
-<td>DB 개발환경 비밀 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-kibana-dev-policy</td>
-<td>svc-kibana-dev</td>
-<td>Kibana 개발환경 비밀 접근</td>
-</tr>
-<tr class="even">
-<td>svc-dashboard-dev-policy</td>
-<td>svc-dashboard-dev</td>
-<td>대시보드 개발환경 비밀 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-nmdose-stg-policy</td>
-<td>svc-nmdose-stg</td>
-<td>nmdose 스테이징(테스트) 비밀/인증서 접근</td>
-</tr>
-<tr class="even">
-<td>svc-pseudo_struct-stg-policy</td>
-<td>svc-pseudo_struct-stg</td>
-<td>pseudo_struct 스테이징(테스트) 비밀/인증서 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-openldap-stg-policy</td>
-<td>svc-openldap-stg</td>
-<td>OpenLDAP 스테이징(테스트) 비밀/인증서 접근</td>
-</tr>
-<tr class="even">
-<td>svc-keycloak-stg-policy</td>
-<td>svc-keycloak-stg</td>
-<td>Keycloak 스테이징(테스트) 비밀/인증서 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-db-stg-policy</td>
-<td>svc-db-stg</td>
-<td>DB 스테이징(테스트) 비밀 접근</td>
-</tr>
-<tr class="even">
-<td>svc-kibana-stg-policy</td>
-<td>svc-kibana-stg</td>
-<td>Kibana 스테이징(테스트) 비밀 접근</td>
-</tr>
-<tr class="odd">
-<td>svc-dashboard-stg-policy</td>
-<td>svc-dashboard-stg</td>
-<td>대시보드 스테이징(테스트) 비밀 접근</td>
-</tr>
-<tr class="even">
-<td>vault-admin-policy</td>
-<td>vault-admin</td>
-<td>Vault 전체 관리, 정책/계정/시스템 설정</td>
-</tr>
-<tr class="odd">
-<td>vault-audit-policy</td>
-<td>vault-audit</td>
-<td>Vault 감사(audit) 로그 열람</td>
-</tr>
-<tr class="even">
-<td>key-admin-policy</td>
-<td>key-admin</td>
-<td>전체 인증서/키 관리, PKI 엔진 전담</td>
-</tr>
-<tr class="odd">
-<td>pseudo-key-admin-policy</td>
-<td>pseudo-key-admin</td>
-<td>가명화키(암복호화) 생성·관리, 로테이션 등</td>
-</tr>
-<tr class="even">
-<td>ldap-secret-admin-policy</td>
-<td>ldap-secret-admin</td>
-<td>OpenLDAP 비밀/인증서 생성·관리</td>
-</tr>
-<tr class="odd">
-<td>keycloak-secret-admin-policy</td>
-<td>keycloak-secret-admin</td>
-<td>Keycloak 비밀/인증서 생성·관리</td>
-</tr>
-<tr class="even">
-<td>db-secret-admin-policy</td>
-<td>db-secret-admin</td>
-<td>DB 비밀/인증서 생성·관리</td>
-</tr>
-</tbody>
-</table>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bash</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sudo docker compose ps</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 
 
 </section>
