@@ -1,0 +1,180 @@
+---
+title: "중앙 로그관리 시스템"
+description: "ELK Stack"
+author: "BenKorea"
+date: "2025-06-27"
+date-modified: last-modified
+categories: [ELK Stack]
+---
+
+## 도커 정보 파악
+
+### 시간 일치
+
+-   개발PC의 timezone을 확인하고
+
+```  {r tz-check, eval=FALSE, filename="bash"}       
+timedatectl
+```
+
+-   "컨테이너의 타임존 관리를 위해 호스트의 /etc/localtime 및 /usr/share/zoneinfo를 컨테이너 내부에 바인드 마운트(bind mount)하여 호스트와 동일한 타임존 환경을 보장한다."
+-   환경변수에 TZ=Asia/Seoul 설정도 한다.
+
+### 컨테이터 서비스 id 확인
+
+-   컨테이너별 서비스 uid/gid를 확인해야 한다.
+
+```{r id-check, eval=FALSE, filename="bash"}         
+ sudo docker exec logstash id
+```
+
+logstash 1000:1000 kibana 1000:1000 elasticsearch 1000:1000
+
+## docker 정리
+
+```{r docker-rearragne, eval=FALSE, filename="bash"}         
+sudo docker container prune
+```
+
+## ELK Stack 설치
+
+### 디렉토리 생성
+
+```{r elk-mkdir, eval=FALSE, filename="bash"}
+sudo mkdir -p ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
+```
+```{r elk-rm, eval=FALSE, filename="bash"}
+sudo rm -rf ~/projects/p31211-r450-pseudo_struct/docker
+```
+
+```{r elk-chown, eval=FALSE, filename="bash"}
+sudo chown -R 1000:1000 ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
+sudo chmod -R 750 ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
+```
+
+-   검증
+
+```{r elk-mkdir-validation, eval=FALSE, filename="bash"}
+sudo ls -ld ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
+```
+
+### docker-compose.yml 작성
+
+```{r nano-yml, eval=FALSE, filename="bash"}
+sudo nano projects/p31211-r450-pseudo_struct/docker-compose.yml
+```
+
+```{r docker-compose, eval=FALSE, filename="docker-compose.yml"}
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - TZ=Asia/Seoul
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    ports:
+      - "9200:9200"
+      - "9300:9300"      
+    networks:
+      - elk
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.2
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+      - TZ=Asia/Seoul
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    ports:
+      - "5044:5044"
+      - "5000:5000"
+      - "9600:9600"      
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - TZ=Asia/Seoul
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - elk
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  elk:
+    driver: bridge
+
+```
+
+-   아래의 설정으로 3개의 컨테이너는 잘 작동해 보인다.
+
+```{r docker-compose-revised, eval=FALSE, filename="docker-compose.yml"}
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false   # 개발환경: 인증/암호 off
+    ports:
+      - 9200:9200
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:9200"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.2
+    container_name: logstash
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./pipeline:/usr/share/logstash/pipeline
+    ports:
+      - 9600:9600         # logstash API
+      - 5044:5044         # beats input 테스트용 (필요시)
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+```
+
+-   실제로 로그가 처리되는지 테스트 한다.
+
+```         
+echo "테스트 로그 $(date)" | sudo tee -a /var/log/syslog
+```

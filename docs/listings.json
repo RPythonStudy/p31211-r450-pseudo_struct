@@ -2,10 +2,11 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/development/secret-management.html",
-      "/posts/development/account-management.html",
-      "/posts/development/authentication.html",
-      "/posts/development/development.html",
+      "/posts/dev/elk.html",
+      "/posts/dev/vault.html",
+      "/posts/dev/ldap.html",
+      "/posts/dev/keycloak.html",
+      "/posts/dev/dev.html",
       "/posts/pseudonymize_files.html",
       "/posts/python.html"
     ]
