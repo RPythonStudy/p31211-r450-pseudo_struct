@@ -1,0 +1,114 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: elasticsearch
+    environment:
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - discovery.type=single-node
+      - TZ=Asia/Seoul
+    mem_limit: 1792m
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - ./docker/elk/esdata:/usr/share/elasticsearch/data
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - elknet
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.12.2
+    container_name: kibana
+    environment:
+      - TZ=Asia/Seoul
+    mem_limit: 640m
+    ports:
+      - "5601:5601"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - elknet
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.12.2
+    container_name: logstash
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      - LS_JAVA_OPTS=-Xms384m -Xmx384m
+      - TZ=Asia/Seoul
+    mem_limit: 640m
+    ports:
+      - "5044:5044"
+      - "5000:5000"
+      - "9600:9600"
+    volumes:
+      - ./docker/elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - elknet
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KC_HEAP=384
+      - TZ=Asia/Seoul
+    mem_limit: 640m
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./docker/keycloak/data:/opt/keycloak/data
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - backend
+
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    mem_limit: 256m
+    ports:
+      - "8200:8200"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./docker/vault/data:/vault/data
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - backend
+
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    mem_limit: 256m
+    ports:
+      - "389:389"
+      - "636:636"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./docker/openldap/data:/var/lib/ldap
+      - ./docker/openldap/config:/etc/ldap/slapd.d
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - backend
+
+networks:
+  elknet:
+    driver: bridge
+  backend:
+    driver: bridge

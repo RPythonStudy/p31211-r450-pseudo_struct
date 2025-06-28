@@ -13,7 +13,7 @@ categories: [ELK Stack]
 
 -   개발PC의 timezone을 확인하고
 
-```  {r tz-check, eval=FALSE, filename="bash"}       
+```{r tz-check, eval=FALSE, filename="bash"}
 timedatectl
 ```
 
@@ -24,7 +24,7 @@ timedatectl
 
 -   컨테이너별 서비스 uid/gid를 확인해야 한다.
 
-```{r id-check, eval=FALSE, filename="bash"}         
+```{r id-check, eval=FALSE, filename="bash"}
  sudo docker exec logstash id
 ```
 
@@ -32,7 +32,7 @@ logstash 1000:1000 kibana 1000:1000 elasticsearch 1000:1000
 
 ## docker 정리
 
-```{r docker-rearragne, eval=FALSE, filename="bash"}         
+```{r docker-rearragne, eval=FALSE, filename="bash"}
 sudo docker container prune
 ```
 
@@ -40,112 +40,128 @@ sudo docker container prune
 
 ### 디렉토리 생성
 
-```{r elk-mkdir, eval=FALSE, filename="bash"}
-sudo mkdir -p ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
-```
+
 ```{r elk-rm, eval=FALSE, filename="bash"}
 sudo rm -rf ~/projects/p31211-r450-pseudo_struct/docker
 ```
 
-```{r elk-chown, eval=FALSE, filename="bash"}
-sudo chown -R 1000:1000 ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
-sudo chmod -R 750 ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
+```{r containter-mkdir, eval=FALSE, filename="bash"}
+# ELK
+mkdir -p ./docker/elk/esdata
+mkdir -p ./docker/elk/logstash/pipeline
+
+# KeyCloak
+mkdir -p ./docker/keycloak/data
+
+# Vault
+mkdir -p ./docker/vault/data
+
+# OoenLDAP
+mkdir -p ./docker/openldap/data
+mkdir -p ./docker/openldap/config
+```
+
+
+```{r own-mod-change, eval=FALSE, filename="bash"}
+# ELK
+sudo chown -R 1000:1000 ./docker/elk
+sudo chown -R 1000:1000 ./docker/elk/esdata
+sudo chown -R 1000:1000 ./docker/elk/logstash
+sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline
+sudo chmod -R 750 ./docker/elk
+sudo chmod -R 750 ./docker/elk/esdata
+sudo chmod -R 750 ./docker/elk/logstash
+sudo chmod -R 750 ./docker/elk/logstash/pipeline
+
+# Keycloak
+sudo chown -R 1000:0 ./docker/keycloak
+sudo chown -R 1000:0 ./docker/keycloak/data
+sudo chmod -R 750 ./docker/keycloak
+sudo chmod -R 750 ./docker/keycloak/data
+
+# Vault
+sudo chown -R 100:101 ./docker/vault
+sudo chown -R 100:101 ./docker/vault/data
+sudo chmod -R 750 ./docker/vault
+sudo chmod -R 750 ./docker/vault/data
+
+# OpenLDAP
+sudo chown -R 101:103 ./docker/openldap
+sudo chown -R 101:103 ./docker/openldap/data
+sudo chown -R 101:103 ./docker/openldap/config
+sudo chmod -R 750 ./docker/openldap
+sudo chmod -R 750 ./docker/openldap/data
+sudo chmod -R 750 ./docker/openldap/config
+
 ```
 
 -   검증
 
-```{r elk-mkdir-validation, eval=FALSE, filename="bash"}
-sudo ls -ld ~/projects/p31211-r450-pseudo_struct/docker/elk ~/projects/p31211-r450-pseudo_struct/docker/elk/esdata ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash ~/projects/p31211-r450-pseudo_struct/docker/elk/logstash/pipline
+```{r own-mode-validation, eval=FALSE, filename="bash"}
+# ELK 관련 폴더 권한/검증
+sudo ls -ld ./docker/elk \
+  ./docker/elk/esdata \
+  ./docker/elk/logstash \
+  ./docker/elk/logstash/pipeline
+
+# Keycloak 폴더 권한/검증
+sudo ls -ld ./docker/keycloak \
+  ./docker/keycloak/data
+
+# Vault 폴더 권한/검증
+sudo ls -ld ./docker/vault \
+  ./docker/vault/data
+
+# OpenLDAP 폴더 권한/검증
+sudo ls -ld ./docker/openldap \
+  ./docker/openldap/data \
+  ./docker/openldap/config
+
 ```
 
 ### docker-compose.yml 작성
 
 ```{r nano-yml, eval=FALSE, filename="bash"}
-sudo nano projects/p31211-r450-pseudo_struct/docker-compose.yml
+sudo nano ~/projects/p31211-r450-pseudo_struct/docker-compose.yml
+```
+
+```{r nano-yml-short, eval=FALSE, filename="bash"}
+sudo nano docker-compose.yml
 ```
 
 ```{r docker-compose, eval=FALSE, filename="docker-compose.yml"}
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    container_name: elasticsearch
     environment:
-      - discovery.type=single-node
       - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - discovery.type=single-node
       - TZ=Asia/Seoul
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-      - /etc/localtime:/etc/localtime:ro
-      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    mem_limit: 1792m
     ports:
       - "9200:9200"
-      - "9300:9300"      
-    networks:
-      - elk
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:8.12.2
-    environment:
-      - LS_JAVA_OPTS=-Xms256m -Xmx256m
-      - TZ=Asia/Seoul
     volumes:
-      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./docker/elk/esdata:/usr/share/elasticsearch/data
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
-    ports:
-      - "5044:5044"
-      - "5000:5000"
-      - "9600:9600"      
-    depends_on:
-      - elasticsearch
     networks:
-      - elk
+      - elknet
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.12.2
+    container_name: kibana
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
       - TZ=Asia/Seoul
+    mem_limit: 640m
     ports:
       - "5601:5601"
-    depends_on:
-      - elasticsearch
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
     networks:
-      - elk
-
-volumes:
-  esdata:
-    driver: local
-
-networks:
-  elk:
-    driver: bridge
-
-```
-
--   아래의 설정으로 3개의 컨테이너는 잘 작동해 보인다.
-
-```{r docker-compose-revised, eval=FALSE, filename="docker-compose.yml"}
-services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false   # 개발환경: 인증/암호 off
-    ports:
-      - 9200:9200
-    healthcheck:
-      test: ["CMD", "curl", "-s", "-f", "http://localhost:9200"]
-      interval: 10s
-      timeout: 10s
-      retries: 10
+      - elknet
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.12.2
@@ -153,28 +169,74 @@ services:
     depends_on:
       elasticsearch:
         condition: service_healthy
+    environment:
+      - LS_JAVA_OPTS=-Xms384m -Xmx384m
+      - TZ=Asia/Seoul
+    mem_limit: 640m
+    ports:
+      - "5044:5044"
+      - "5000:5000"
+      - "9600:9600"
     volumes:
-      - ./pipeline:/usr/share/logstash/pipeline
-    ports:
-      - 9600:9600         # logstash API
-      - 5044:5044         # beats input 테스트용 (필요시)
+      - ./docker/elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - elknet
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
     environment:
-      - LS_JAVA_OPTS=-Xms512m -Xmx512m
-
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.12.2
-    container_name: kibana
+      - KC_HEAP=384
+      - TZ=Asia/Seoul
+    mem_limit: 640m
     ports:
-      - 5601:5601
+      - "8080:8080"
+      - "8443:8443"
+    volumes:
+      - ./docker/keycloak/data:/opt/keycloak/data
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - backend
+
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault
+    mem_limit: 256m
+    ports:
+      - "8200:8200"
     environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-```
+      - TZ=Asia/Seoul
+    volumes:
+      - ./docker/vault/data:/vault/data
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - backend
 
--   실제로 로그가 처리되는지 테스트 한다.
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    mem_limit: 256m
+    ports:
+      - "389:389"
+      - "636:636"
+    environment:
+      - TZ=Asia/Seoul
+    volumes:
+      - ./docker/openldap/data:/var/lib/ldap
+      - ./docker/openldap/config:/etc/ldap/slapd.d
+      - /etc/localtime:/etc/localtime:ro
+      - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    networks:
+      - backend
 
-```         
-echo "테스트 로그 $(date)" | sudo tee -a /var/log/syslog
+networks:
+  elknet:
+    driver: bridge
+  backend:
+    driver: bridge
+
 ```
