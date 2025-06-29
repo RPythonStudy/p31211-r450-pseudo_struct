@@ -179,6 +179,7 @@ services:
       - "9600:9600"
     volumes:
       - ./docker/elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - /var/log:/var/log:ro      
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
     networks:
@@ -239,4 +240,195 @@ networks:
   backend:
     driver: bridge
 
+```
+
+
+### logstash 컨테이너 설정
+- 위 설정에서는 lohstash 컨테이너가 구동되는 파이프라인이 없어 바로 종료된다.
+- 개발 PC의 시스템로그를 파이프라인에 아래와 같이 추가한다.
+
+```{r logstash-pipeline, eval=FALSE, filename="logstash.conf"}
+input {
+  beats {
+    port => 5044
+  }
+  # 필요하다면 기존 file input도 함께 사용 가능
+  # file {
+  #   path => "/var/log/syslog"
+  #   start_position => "beginning"
+  #   sincedb_path => "/dev/null"
+  # }
+}
+
+filter {
+  grok {
+    match => { "message" => "%{TIMESTAMP_ISO8601:log_time} %{HOSTNAME:hostname} %{WORD:process}\[%{NUMBER:pid}\]: %{GREEDYDATA:summary}" }
+    tag_on_failure => [ "_grokparsefailure" ]
+  }
+  # log_time에서 'YYYY-MM-DD HH:MM:SS'만 추출 (공백 또는 T 기준 split)
+  ruby {
+    code => '
+      if event.get("log_time")
+        t = event.get("log_time").to_s
+        # "2025-06-29T23:06:00.732869+09:00" or "2025-06-29 23:06:00.732869+09:00"
+        d, tm = t.split(/[T ]/)
+        if tm
+          event.set("short_time", "#{d} #{tm[0..7]}")
+        else
+          event.set("short_time", t[0..18])
+        end
+      end
+    '
+  }
+  json {
+    source => "summary"
+    target => "summary_json"
+    skip_on_invalid_json => true
+  }
+  if [summary_json][message] {
+    mutate {
+      replace => { "summary" => "%{[summary_json][message]}" }
+    }
+  }
+  mutate {
+    remove_field => ["summary_json"]
+    gsub => [
+      "summary", "\b\d{8}\b", "******"
+    ]
+  }
+}
+output {
+  elasticsearch {
+    hosts => ["elasticsearch:9200"]  # docker compose 내부면 서비스명, 외부면 IP:PORT
+    index => "syslog-%{+YYYY.MM.dd}"
+  }
+
+  stdout {
+    codec => line {
+      format => "%{short_time} | %{process}[%{pid}] | %{summary}"
+    }
+  }
+}
+
+```
+
+이 conf 파일과 그안에서 설정한 경로도 소유와 권한을 변경해야 한다.
+```{r own-mod-change-logstash-conf, eval=FALSE, filename="bash"}
+
+sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline/logstash.conf
+sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
+
+sudo chown 1000:1000 /var/log/syslog
+sudo chmod 750 /var/log/syslog
+
+```
+
+```{r own-mode-validation-logstash-conf, eval=FALSE, filename="bash"}
+# ELK 관련 폴더 권한/검증
+sudo ls -ld ./docker/elk/logstash/pipeline/logstash.conf \
+             /var/log/syslog
+
+```
+
+그리고 /var/log 폴더도 마운트해야 한다.
+```{r own-mod-change-logstash-conf, eval=FALSE, filename="bash"}
+
+sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline/logstash.conf
+sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
+
+```
+
+## Filebeat 설치
+
+```
+curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | \
+  sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+```
+
+```
+sudo apt-get update
+```
+
+```
+sudo apt-get install filebeat
+```
+
+```
+filebeat version
+```
+
+```
+sudo systemctl enable filebeat
+sudo systemctl start filebeat
+sudo systemctl status filebeat
+```
+
+#### filebeat 계정만들기
+```
+sudo groupadd --system filebeat
+sudo useradd --system --no-create-home --shell /sbin/nologin --gid filebeat filebeat
+```
+- 검증
+```
+getent passwd filebeat
+```
+notebook에서는 995:986
+
+
+```
+sudo mkdir /etc/filebeat
+```
+
+
+```{r filebeat-config, eval=FALSE, filename="filebeat.yml"}
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/syslog
+
+# logstash output
+output.logstash:
+  hosts: ["localhost:5044"]   # 도커 네트워크라면 logstash, 외부라면 IP:PORT
+
+```
+
+
+```
+sudo chown -R 995:986 /etc/filebeat
+sudo chmod 750 /etc/filebeat
+sudo chmod 640 /etc/filebeat/filebeat.yml
+```
+
+- 검증
+```
+ls -ld /etc/filebeat
+ls -l /etc/filebeat/filebeat.yml
+```
+권한오류가 발생하여 root 로 복귀
+
+```
+sudo chown root:root /etc/filebeat/filebeat.yml
+sudo chmod 640 /etc/filebeat/filebeat.yml
+```
+
+검증
+```
+sudo filebeat test config
+```
+
+```
+sudo filebeat test output
+```
+
+```
+sudo systemctl restart filebeat
+sudo systemctl status filebeat
+```
+
+```
+echo "filebeat 실전 로그 테스트 $(date)" | sudo tee -a /var/log/syslog
 ```

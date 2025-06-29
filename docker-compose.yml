@@ -53,6 +53,7 @@ services:
       - "9600:9600"
     volumes:
       - ./docker/elk/logstash/pipeline:/usr/share/logstash/pipeline
+      - /var/log:/var/log:ro
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
     networks:
