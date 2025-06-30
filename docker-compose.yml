@@ -79,15 +79,30 @@ services:
   vault:
     image: hashicorp/vault:latest
     container_name: vault
+    cap_add:
+      - IPC_LOCK
     mem_limit: ${VT_MEM_LIMIT}
     ports:
       - "8200:8200"
     environment:
-      - TZ=Asia/Seoul
+      VAULT_LOCAL_CONFIG: |
+        {
+          "storage": {"file": {"path": "/vault/file"}},
+          "listener": [
+            {"tcp": { "address": "0.0.0.0:8200", "tls_cert_file": "/vault/certs/vault.crt", "tls_key_file": "/vault/certs/vault.key"}}
+          ],
+          "default_lease_ttl": "168h",
+          "max_lease_ttl": "720h",
+          "ui": true
+        }
+      VAULT_API_ADDR: "https://vault:8200"   # <--- 이 줄만 추가
+      TZ: Asia/Seoul
     volumes:
-      - ./docker/vault/data:/vault/data
+      - ./docker/vault/file:/vault/file
+      - ./docker/vault/certs:/vault/certs
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    command: server
     networks:
       - backend
 

@@ -20,9 +20,20 @@ sudo mkdir -p ~/projects/vault
 -   적절한 권한을 부여
 
 ```{r vault-mkdir-sub, eval=FALSE, filename="bash"}
-sudo mkdir -p ~/projects/vault/config ~/projects/vault/file ~/projects/vault/certs ~/projects/vault/logs
-sudo chown 100:100 ~/projects/vault/config ~/projects/vault/file ~/projects/vault/certs ~/projects/vault/logs
-sudo chmod 700 ~/projects/vault/config ~/projects/vault/file ~/projects/vault/certs ~/projects/vault/logs
+sudo mkdir -p ~/projects/vault/config
+sudo mkdir -p ~/projects/vault/file
+sudo mkdir -p ~/projects/vault/certs
+sudo mkdir -p ~/projects/vault/logs
+
+sudo chown 100:100 ~/projects/vault/config
+sudo chown 100:100 ~/projects/vault/file
+sudo chown 100:100 ~/projects/vault/certs
+sudo chown 100:100 ~/projects/vault/logs
+
+sudo chmod 700 ~/projects/vault/config
+sudo chmod 700 ~/projects/vault/file
+sudo chmod 700 ~/projects/vault/certs
+sudo chmod 700 ~/projects/vault/logs
 ```
 
 -   검증
