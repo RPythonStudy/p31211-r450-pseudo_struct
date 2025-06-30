@@ -4,10 +4,10 @@ services:
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM}"   # .env file should define ES_MEM
       - discovery.type=single-node
       - TZ=Asia/Seoul
-    mem_limit: 1792m
+    mem_limit: ${ES_MEM_LIMIT:-1792m}  # 환경변수로 변경
     ports:
       - "9200:9200"
     healthcheck:
@@ -28,7 +28,7 @@ services:
     container_name: kibana
     environment:
       - TZ=Asia/Seoul
-    mem_limit: 640m
+    mem_limit: ${KB_MEM_LIMIT}
     ports:
       - "5601:5601"
     volumes:
@@ -44,9 +44,9 @@ services:
       elasticsearch:
         condition: service_healthy
     environment:
-      - LS_JAVA_OPTS=-Xms384m -Xmx384m
+      - "LS_JAVA_OPTS=-Xms${LS_MEM} -Xmx${LS_MEM}"
       - TZ=Asia/Seoul
-    mem_limit: 640m
+    mem_limit: ${LS_MEM_LIMIT}
     ports:
       - "5044:5044"
       - "5000:5000"
@@ -63,9 +63,9 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
-      - KC_HEAP=384
+      - KC_HEAP=${KC_HEAP}
       - TZ=Asia/Seoul
-    mem_limit: 640m
+    mem_limit: ${KC_MEM_LIMIT}
     ports:
       - "8080:8080"
       - "8443:8443"
@@ -79,7 +79,7 @@ services:
   vault:
     image: hashicorp/vault:latest
     container_name: vault
-    mem_limit: 256m
+    mem_limit: ${VT_MEM_LIMIT}
     ports:
       - "8200:8200"
     environment:
@@ -94,7 +94,7 @@ services:
   openldap:
     image: osixia/openldap:latest
     container_name: openldap
-    mem_limit: 256m
+    mem_limit: ${LD_MEM_LIMIT}
     ports:
       - "389:389"
       - "636:636"

@@ -40,7 +40,6 @@ sudo docker container prune
 
 ### 디렉토리 생성
 
-
 ```{r elk-rm, eval=FALSE, filename="bash"}
 sudo rm -rf ~/projects/p31211-r450-pseudo_struct/docker
 ```
@@ -60,7 +59,6 @@ mkdir -p ./docker/vault/data
 mkdir -p ./docker/openldap/data
 mkdir -p ./docker/openldap/config
 ```
-
 
 ```{r own-mod-change, eval=FALSE, filename="bash"}
 # ELK
@@ -136,12 +134,18 @@ services:
     container_name: elasticsearch
     environment:
       - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - "ES_JAVA_OPTS=-Xms${ES_MEM} -Xmx${ES_MEM}"   # .env file should define ES_MEM
       - discovery.type=single-node
       - TZ=Asia/Seoul
-    mem_limit: 1792m
+    mem_limit: ${ES_MEM_LIMIT:-1792m}  # 환경변수로 변경
     ports:
       - "9200:9200"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     volumes:
       - ./docker/elk/esdata:/usr/share/elasticsearch/data
       - /etc/localtime:/etc/localtime:ro
@@ -154,7 +158,7 @@ services:
     container_name: kibana
     environment:
       - TZ=Asia/Seoul
-    mem_limit: 640m
+    mem_limit: ${KB_MEM_LIMIT}
     ports:
       - "5601:5601"
     volumes:
@@ -170,16 +174,16 @@ services:
       elasticsearch:
         condition: service_healthy
     environment:
-      - LS_JAVA_OPTS=-Xms384m -Xmx384m
+      - "LS_JAVA_OPTS=-Xms${LS_MEM} -Xmx${LS_MEM}"
       - TZ=Asia/Seoul
-    mem_limit: 640m
+    mem_limit: ${LS_MEM_LIMIT}
     ports:
       - "5044:5044"
       - "5000:5000"
       - "9600:9600"
     volumes:
       - ./docker/elk/logstash/pipeline:/usr/share/logstash/pipeline
-      - /var/log:/var/log:ro      
+      - /var/log:/var/log:ro
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
     networks:
@@ -189,9 +193,9 @@ services:
     image: quay.io/keycloak/keycloak:latest
     container_name: keycloak
     environment:
-      - KC_HEAP=384
+      - KC_HEAP=${KC_HEAP}
       - TZ=Asia/Seoul
-    mem_limit: 640m
+    mem_limit: ${KC_MEM_LIMIT}
     ports:
       - "8080:8080"
       - "8443:8443"
@@ -205,7 +209,7 @@ services:
   vault:
     image: hashicorp/vault:latest
     container_name: vault
-    mem_limit: 256m
+    mem_limit: ${VT_MEM_LIMIT}
     ports:
       - "8200:8200"
     environment:
@@ -220,7 +224,7 @@ services:
   openldap:
     image: osixia/openldap:latest
     container_name: openldap
-    mem_limit: 256m
+    mem_limit: ${LD_MEM_LIMIT}
     ports:
       - "389:389"
       - "636:636"
@@ -240,12 +244,13 @@ networks:
   backend:
     driver: bridge
 
+
 ```
 
-
 ### logstash 컨테이너 설정
-- 위 설정에서는 lohstash 컨테이너가 구동되는 파이프라인이 없어 바로 종료된다.
-- 개발 PC의 시스템로그를 파이프라인에 아래와 같이 추가한다.
+
+-   위 설정에서는 lohstash 컨테이너가 구동되는 파이프라인이 없어 바로 종료된다.
+-   개발 PC의 시스템로그를 파이프라인에 아래와 같이 추가한다.
 
 ```{r logstash-pipeline, eval=FALSE, filename="logstash.conf"}
 input {
@@ -313,13 +318,14 @@ output {
 ```
 
 이 conf 파일과 그안에서 설정한 경로도 소유와 권한을 변경해야 한다.
+
 ```{r own-mod-change-logstash-conf, eval=FALSE, filename="bash"}
 
 sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline/logstash.conf
 sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
 
-sudo chown 1000:1000 /var/log/syslog
-sudo chmod 750 /var/log/syslog
+#sudo chown 1000:1000 /var/log/syslog
+#sudo chmod 750 /var/log/syslog
 
 ```
 
@@ -331,6 +337,7 @@ sudo ls -ld ./docker/elk/logstash/pipeline/logstash.conf \
 ```
 
 그리고 /var/log 폴더도 마운트해야 한다.
+
 ```{r own-mod-change-logstash-conf, eval=FALSE, filename="bash"}
 
 sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline/logstash.conf
@@ -340,47 +347,30 @@ sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
 
 ## Filebeat 설치
 
-```
+```         
 curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
 
 echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | \
   sudo tee /etc/apt/sources.list.d/elastic-8.x.list
 ```
 
-```
+```         
 sudo apt-get update
 ```
 
-```
+```         
 sudo apt-get install filebeat
 ```
 
-```
+```         
 filebeat version
 ```
 
-```
+```         
 sudo systemctl enable filebeat
 sudo systemctl start filebeat
 sudo systemctl status filebeat
 ```
-
-#### filebeat 계정만들기
-```
-sudo groupadd --system filebeat
-sudo useradd --system --no-create-home --shell /sbin/nologin --gid filebeat filebeat
-```
-- 검증
-```
-getent passwd filebeat
-```
-notebook에서는 995:986
-
-
-```
-sudo mkdir /etc/filebeat
-```
-
 
 ```{r filebeat-config, eval=FALSE, filename="filebeat.yml"}
 
@@ -396,39 +386,43 @@ output.logstash:
 
 ```
 
-
-```
+```         
 sudo chown -R 995:986 /etc/filebeat
 sudo chmod 750 /etc/filebeat
 sudo chmod 640 /etc/filebeat/filebeat.yml
 ```
 
-- 검증
-```
+-   검증
+
+```         
 ls -ld /etc/filebeat
 ls -l /etc/filebeat/filebeat.yml
 ```
+
 권한오류가 발생하여 root 로 복귀
 
-```
+```         
 sudo chown root:root /etc/filebeat/filebeat.yml
 sudo chmod 640 /etc/filebeat/filebeat.yml
 ```
 
 검증
-```
+
+```         
 sudo filebeat test config
 ```
 
-```
+```         
 sudo filebeat test output
 ```
 
-```
+```         
 sudo systemctl restart filebeat
 sudo systemctl status filebeat
 ```
 
-```
+```         
 echo "filebeat 실전 로그 테스트 $(date)" | sudo tee -a /var/log/syslog
 ```
+
+-   검증 HTTP://localhost:5061 \`\`\`

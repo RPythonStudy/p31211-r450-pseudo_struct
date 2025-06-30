@@ -15,3 +15,10 @@ staging:
 production:
   logging:
     level: ERROR      # 운영 시 ERROR
+
+education:
+  logging:
+    level: DEBUG
+  fpe:
+    key: "0123456789abcdef0123456789abcdef"
+    tweak: "abcdef12345678"    

@@ -1,0 +1,20 @@
+---
+title: "config.yml"
+description: ""
+author: "BenKorea"
+date: "2025-06-30"
+date-modified: last-modified
+categories: [config]
+---
+
+운영모드를 config/config.yml에 설정하였다.
+config_loader.py에서 적절한 경로를 찾아가니 아래의 테스트로 검증된다.
+
+```
+python src/pseudo_struct/utils/config_loader.py
+```
+
+```
+PS_ENV=education python src/pseudo_struct/utils/config_loader.py
+```
+   
