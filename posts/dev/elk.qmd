@@ -322,7 +322,6 @@ docker exec -it vault env | grep VAULT_API_ADDR
 -   위 설정에서는 lohstash 컨테이너가 구동되는 파이프라인이 없어 바로 종료된다.
 -   개발 PC의 시스템로그를 파이프라인에 아래와 같이 추가한다.
 
-
 ```{r nano-yml-short, eval=FALSE, filename="bash"}
 sudo nano docker/elk/logstash/pipeline/logstash.conf
 ```

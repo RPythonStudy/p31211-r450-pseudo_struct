@@ -105,10 +105,16 @@ services:
       TZ: Asia/Seoul
     volumes:      
       - ./docker/vault/file:/vault/file
+      - ./docker/vault/config:/vault/config
       - ./docker/vault/certs:/vault/certs          
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
-    command: server      
+    command: >
+      sh -c "
+        cp /vault/certs/vault.crt /etc/ssl/certs/vault.crt 2>/dev/null || true;
+        cat /vault/certs/vault.crt >> /etc/ssl/certs/ca-certificates.crt 2>/dev/null || true;
+        vault server -config=/vault/config/local.json
+      "
     networks:
       - backend
 
