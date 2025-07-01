@@ -46,21 +46,21 @@ sudo rm -rf ~/projects/p31211-r450-pseudo_struct/docker
 
 ```{r containter-mkdir, eval=FALSE, filename="bash"}
 # ELK
-mkdir -p ./docker/elk/esdata
-mkdir -p ./docker/elk/logstash/pipeline
+sudo mkdir -p ./docker/elk/esdata
+sudo mkdir -p ./docker/elk/logstash/pipeline
 
 # KeyCloak
-mkdir -p ./docker/keycloak/data
+sudo mkdir -p ./docker/keycloak/data
 
 # Vault
-mkdir -p ./docker/vault/config
-mkdir -p ./docker/vault/file
-mkdir -p ./docker/vault/certs
-mkdir -p ./docker/vault/logs
+sudo mkdir -p ./docker/vault/config
+sudo mkdir -p ./docker/vault/file
+sudo mkdir -p ./docker/vault/certs
+sudo mkdir -p ./docker/vault/logs
 
 # OoenLDAP
-mkdir -p ./docker/openldap/data
-mkdir -p ./docker/openldap/config
+sudo mkdir -p ./docker/openldap/data
+sudo mkdir -p ./docker/openldap/config
 ```
 
 ```{r own-mod-change, eval=FALSE, filename="bash"}
@@ -156,7 +156,6 @@ sudo chown 100:100 ./docker/vault/certs/vault.key
 sudo ls -l docker/vault/certs
 ```
 
-
 ```{r openssl-subject-SAN-validation, eval=FALSE, filename="bash"}
 sudo openssl x509 -in docker/vault/certs/vault.crt -noout -text | grep -E 'Subject:|DNS:|IP Address'
 ```
@@ -239,6 +238,11 @@ services:
     environment:
       - KC_HEAP=${KC_HEAP}
       - TZ=Asia/Seoul
+      - KEYCLOAK_ADMIN=admin           # <- 반드시 추가
+      - KEYCLOAK_ADMIN_PASSWORD=admin  # <- 반드시 추가
+      - KC_DB=dev-mem                  # <- 테스트용 인메모리 DB, 필요시 삭제/변경
+      # - KC_HOSTNAME=localhost        # 필요시
+      # 기타 환경변수 추가 가능
     mem_limit: ${KC_MEM_LIMIT}
     ports:
       - "8080:8080"
@@ -247,8 +251,9 @@ services:
       - ./docker/keycloak/data:/opt/keycloak/data
       - /etc/localtime:/etc/localtime:ro
       - /usr/share/zoneinfo:/usr/share/zoneinfo:ro
+    command: start-dev                 # <- 이 부분 반드시 추가!
     networks:
-      - backend
+      - backend      
 
   vault:
     image: hashicorp/vault:latest
@@ -316,6 +321,11 @@ docker exec -it vault env | grep VAULT_API_ADDR
 
 -   위 설정에서는 lohstash 컨테이너가 구동되는 파이프라인이 없어 바로 종료된다.
 -   개발 PC의 시스템로그를 파이프라인에 아래와 같이 추가한다.
+
+
+```{r nano-yml-short, eval=FALSE, filename="bash"}
+sudo nano docker/elk/logstash/pipeline/logstash.conf
+```
 
 ```{r logstash-pipeline, eval=FALSE, filename="logstash.conf"}
 input {
