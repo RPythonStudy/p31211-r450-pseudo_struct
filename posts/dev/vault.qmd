@@ -8,19 +8,20 @@ categories: [Vault]
 ---
 
 ## TLS 인증서
-HTTP 통신의 보안을 강화하기 위해서는 암호화된 통신(HTTPS/TLS)이 필요하다.
-이를 위해 서버와 클라이언트는 TLS 인증서(공개키/개인키 쌍)를 사용한다.
-이 프로젝트에서는 도커로 실행되는 Vault 서버가 인증서 발급을 담당한다.
-하지만 Vault 서버가 자체적으로 인증서를 발급하기 전, 최초 1회 HTTPS 접속 시에는 인증서가 없으므로 openssl을 사용해 자체 서명 임시 인증서를 생성해 이용하도록 구현했다.
+
+HTTP 통신의 보안을 강화하기 위해서는 암호화된 통신(HTTPS/TLS)이 필요하다. 이를 위해 서버와 클라이언트는 TLS 인증서(공개키/개인키 쌍)를 사용한다. 이 프로젝트에서는 도커로 실행되는 Vault 서버가 인증서 발급을 담당한다. 하지만 Vault 서버가 자체적으로 인증서를 발급하기 전, 최초 1회 HTTPS 접속 시에는 인증서가 없으므로 openssl을 사용해 자체 서명 임시 인증서를 생성해 이용하도록 구현했다.
 
 ## vault 컨테이너 임시인증서 신뢰 등록
 
-- 컨테이너 운영체제를 조사
-```
+-   컨테이너 운영체제를 조사
+
+```         
 sudo docker exec -it vault cat /etc/os-release
 ```
-- Alpine Linux 컨테이너이므로 
-```
+
+-   Alpine Linux 컨테이너이므로
+
+```         
 sudo docker exec -it vault cp /vault/certs/vault.crt /etc/ssl/certs/vault.crt
 sudo docker exec -it vault /bin/sh -c "cat /vault/certs/vault.crt >> /etc/ssl/certs/ca-certificates.crt"
 ```
@@ -31,21 +32,23 @@ sudo docker exec -it vault /bin/sh -c "cat /vault/certs/vault.crt >> /etc/ssl/ce
 sudo docker exec -it vault vault operator init
 ```
 
-```
+```         
 sudo docker exec -it vault vault operator unseal
 ```
+
 이 때 안전보관된 key을 입력해서 키가 올바른지 확인해 두는 것이 필요
 
-
-```
+```         
 sudo docker exec -it vault vault login
 ```
-- token _accessor도 안전보관
+
+-   token \_accessor도 안전보관
 
 ## PKI 설정
 
-- 설치과정에 오류가 의심되면 pki disable 이후 다시 한다.
-```
+-   설치과정에 오류가 의심되면 pki disable 이후 다시 한다.
+
+```         
 sudo docker exec -it vault vault secrets disable pki
 ```
 
@@ -53,16 +56,17 @@ sudo docker exec -it vault vault secrets disable pki
 
 #### pki 엔진 활성 및 설정
 
-```
+```         
 sudo docker exec -it vault vault secrets enable pki
 ```
-```
+
+```         
 sudo docker exec -it vault vault secrets tune -max-lease-ttl=8760h pki
 ```
 
 #### root CA 발급
 
-```
+```         
 sudo docker exec -it vault vault write pki/root/generate/internal \
     common_name=my-website.com \
     ttl=8760h
@@ -70,15 +74,15 @@ sudo docker exec -it vault vault write pki/root/generate/internal \
 
 #### Update the CRL location and issuing certificates
 
-```
+```         
 sudo docker exec -it vault vault write pki/config/urls \
     issuing_certificates="http://127.0.0.1:8200/v1/pki/ca" \
     crl_distribution_points="http://127.0.0.1:8200/v1/pki/crl"
-```    
-
-#### Configure a role 
-
 ```
+
+#### Configure a role
+
+```         
 sudo docker exec -it vault vault write pki/roles/example-dot-com \
     allowed_domains=my-website.com \
     allow_subdomains=true \
@@ -86,131 +90,122 @@ sudo docker exec -it vault vault write pki/roles/example-dot-com \
 ```
 
 #### Generate a new credentia
-```
+
+```         
 sudo docker exec -it vault vault write -format=json pki/issue/example-dot-com \
   common_name=www.my-website.com > cert.json
 ```
 
 #### jq 설치
-```
+
+```         
 sudo apt-get update
 sudo apt-get install jq
 ```
 
+-   개발PC에 정책파일 pki-issuer.hcl 생성
 
-
-
-- 개발PC에 정책파일  pki-issuer.hcl 생성
-
-```
+```         
 sudo nano docker/vault/config/pki-issuer.hcl
 ```
-# 인증서 발급(role별), 사인(sign), cert 읽기, CRL/CA chain 읽기 권한
-path "pki/issue/*" {
-  capabilities = ["create", "update"]
-}
-path "pki/sign/*" {
-  capabilities = ["create", "update"]
-}
-path "pki/cert/*" {
-  capabilities = ["read"]
-}
-path "pki/crl/*" {
-  capabilities = ["read"]
-}
-path "pki/ca" {
-  capabilities = ["read"]
-}
 
-```
+# 인증서 발급(role별), 사인(sign), cert 읽기, CRL/CA chain 읽기 권한
+
+path "pki/issue/*" { capabilities = \["create", "update"\] } path "pki/sign/*" { capabilities = \["create", "update"\] } path "pki/cert/*" { capabilities = \["read"\] } path "pki/crl/*" { capabilities = \["read"\] } path "pki/ca" { capabilities = \["read"\] }
+
+```         
 
 - 권한설정
 ```
-sudo chown 100:100 ./docker/vault/config/pki-issuer.hcl
-sudo chmod -R 750 ./docker/vault/config/pki-issuer.hcl
-```
+
+sudo chown 100:100 ./docker/vault/config/pki-issuer.hcl sudo chmod -R 750 ./docker/vault/config/pki-issuer.hcl
+
+```         
 
 - 검증
 ```
+
 sudo ls -ld ./docker/vault/config/pki-issuer.hcl
-```
+
+```         
 
 컨테이너로 복사하기
 ```
+
 sudo docker cp ./docker/vault/config/pki-issuer.hcl vault:/vault/config/pki-issuer.hcl
-```
+
+```         
 
 - 정책 등록
 ```
+
 sudo docker exec -it vault vault policy write pki-issuer /vault/config/pki-issuer.hcl
-```
+
+```         
 
 - 검증
 ```
+
 sudo docker exec -it vault vault policy list
+
+```         
 ```
 
-```
 sudo docker exec -it vault vault policy read pki-issuer
 
-```
+```         
 
 ### 토큰 발행
+```
 
-```
 sudo docker exec -it vault vault token create -policy=pki-issuer -ttl=24h
-```
+
+```         
 
 
 Vault PKI Role(역할) 생성
-
 ```
-sudo docker exec -it vault vault write pki/roles/web-server \
-  allowed_domains="localhost, keycloak-server, openldap-server" \
-  allow_subdomains=true \
-  max_ttl="24h"   # (운영은 1년 등, 필요시 24h~12h로 테스트)
 
-```
+sudo docker exec -it vault vault write pki/roles/web-server\
+allowed_domains="localhost, keycloak-server, openldap-server"\
+allow_subdomains=true\
+max_ttl="24h" \# (운영은 1년 등, 필요시 24h\~12h로 테스트)
+
+```         
 
 Root CA(issuer) 생성
+```
 
-```
-sudo docker exec -it vault vault write pki/root/generate/internal     common_name=my-website.com     ttl=8760h
-```
+sudo docker exec -it vault vault write pki/root/generate/internal common_name=my-website.com ttl=8760h
+
+```         
 
 ### 개발단계 인증서 통합 운영
 
 - 새로운 Role을 정의하고
 ```
-sudo docker exec -it vault vault write pki/roles/dev-multi-service \
-  allowed_domains="vault keycloak openldap localhost" \
-  allow_subdomains=true \
-  max_ttl="168h"
 
+sudo docker exec -it vault vault write pki/roles/dev-multi-service\
+allowed_domains="vault keycloak openldap localhost"\
+allow_subdomains=true\
+max_ttl="168h"
 
-```
+```         
 
 - 궁금해서 role을 조회한다면
 ```
+
 sudo docker exec -it vault vault list pki/roles
-```
+
+```         
 
 - 위 Role을 이용해서 통합 인증서 발급
 ```
-sudo docker exec -it vault vault write -format=json pki/issue/dev-multi-service \
-  common_name="vault" \
-  alt_names="vault,keycloak,openldap,localhost,127.0.0.1" \
-  ttl="72h"
-```
 
-
-
-
-
-
-
-
-
+sudo docker exec -it vault vault write -format=json pki/issue/dev-multi-service\
+common_name="vault"\
+alt_names="vault,keycloak,openldap,localhost,127.0.0.1"\
+ttl="72h" \`\`\`
 
 ### api를 이용한 컨테이너 vault 초기화
 
