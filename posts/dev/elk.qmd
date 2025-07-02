@@ -141,7 +141,7 @@ sudo openssl req \
   -days 14 \
   -nodes \
   -subj "/C=KR/ST=Seoul/L=Seoul/O=KIRAMS/OU=RPythonStudy/CN=localhost" \
-  -addext "subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:keycloak-server, DNS:openldap-server"
+  -addext "subjectAltName = DNS:localhost, IP:127.0.0.1, DNS:elasticsearch, DNS:kibana, DNS:logstash, DNS:keycloak, DNS:vault, DNS:openldap"
 ```
 
 -   컨테이너 내 vault가 사용할 수 있도록 권한설정
@@ -398,26 +398,13 @@ output {
 sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline/logstash.conf
 sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
 
-#sudo chown 1000:1000 /var/log/syslog
-#sudo chmod 750 /var/log/syslog
-
 ```
 
-```{r own-mode-validation-logstash-conf, eval=FALSE, filename="bash"}
-# ELK 관련 폴더 권한/검증
-sudo ls -ld ./docker/elk/logstash/pipeline/logstash.conf \
-             /var/log/syslog
-
+자동화 스크립트 권한변경
+```
+chmod +x scripts/init_docker_dirs_and_perms.sh
 ```
 
-그리고 /var/log 폴더도 마운트해야 한다.
-
-```{r own-mod-change-logstash-conf, eval=FALSE, filename="bash"}
-
-sudo chown -R 1000:1000 ./docker/elk/logstash/pipeline/logstash.conf
-sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
-
-```
 
 ## Filebeat 설치
 
