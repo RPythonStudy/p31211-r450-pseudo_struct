@@ -20,7 +20,7 @@ __pycache__/
 *.code-workspace
 
 # ── dotenv ──────────────────────────────────────────────────────────────────
-.env*           # .env, .env.local, .env.staging, .env.production 등 모두 무시
+.env*
 !.env.example   # 예시 템플릿만 커밋
 
 # ── Python artifacts ─────────────────────────────────────────────────────────
