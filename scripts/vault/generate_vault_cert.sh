@@ -11,7 +11,7 @@ sudo docker exec $VAULT_CONTAINER vault secrets tune -max-lease-ttl=8760h pki
 
 # 2. Root CA 발급
 sudo docker exec $VAULT_CONTAINER vault write pki/root/generate/internal \
-    common_name=localhost \
+    common_name="KIRAMS RPythonStudy PseudoStruct CA" \
     ttl=8760h
 
 # 3. CRL, issuing cert URL 설정

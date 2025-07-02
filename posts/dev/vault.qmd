@@ -48,7 +48,6 @@ sudo docker exec -it vault vault login
 
 HTTP 통신의 보안을 강화하기 위해서는 암호화된 통신(HTTPS/TLS)이 필요하다. 이를 위해 서버와 클라이언트는 TLS 인증서(공개키/개인키 쌍)를 사용한다. 이 프로젝트에서는 도커로 실행되는 Vault 서버가 인증서 발급을 담당한다. 하지만 Vault 서버가 자체적으로 인증서를 발급하기 전, 최초 1회 HTTPS 접속 시에는 인증서가 없으므로 openssl을 사용해 자체 서명 임시 인증서를 생성해 이용하도록 구현했다. 그래서 최초 접속했을 때 자가서명 인증서를 발급받아서 이를 vault 서버용으로 사용한다. 개발단계에서는 여러서버를 이 하나로 공통으로 사용할 예정이다.
 
-
 ### pki 엔진 활성 및 설정
 
 ```         
@@ -137,10 +136,10 @@ sudo chown 100:100 ./docker/vault/certs/vault.key
 ```
 
 bash 실행파일 권한변경
-```
+
+```         
 sudo chmod +x scripts/vault/generate_vault_cert.sh
 ```
-
 
 ```{r vault-certs-validation, eval=FALSE, filename="bash"}
 sudo openssl x509 -in docker/vault/certs/vault.crt -noout -text | grep -E 'Subject:|DNS:|IP Address'
@@ -157,6 +156,15 @@ sudo docker compose restart vault
 ```         
 curl -vk https://localhost:8200/v1/sys/health
 ```
+
+```
+sudo docker exec vault cat /vault/certs/vault.crt > test.crt
+```
+
+```
+openssl x509 -in test.crt -noout -text | grep 'Issuer\|Subject'
+```
+
 
 ## 가명화 암호화키 저장
 
