@@ -157,14 +157,13 @@ sudo docker compose restart vault
 curl -vk https://localhost:8200/v1/sys/health
 ```
 
-```
+```         
 sudo docker exec vault cat /vault/certs/vault.crt > test.crt
 ```
 
-```
+```         
 openssl x509 -in test.crt -noout -text | grep 'Issuer\|Subject'
 ```
-
 
 ## 가명화 암호화키 저장
 

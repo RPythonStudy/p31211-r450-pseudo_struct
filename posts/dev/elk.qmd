@@ -401,10 +401,10 @@ sudo chmod -R 750 ./docker/elk/logstash/pipeline/logstash.conf
 ```
 
 자동화 스크립트 권한변경
-```
+
+```         
 chmod +x scripts/init_docker_dirs_and_perms.sh
 ```
-
 
 ## Filebeat 설치
 
